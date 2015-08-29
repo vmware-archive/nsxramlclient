@@ -1,0 +1,12 @@
+README.rst
+setup.py
+nsxramlclient/__init__.py
+nsxramlclient/client.py
+nsxramlclient/http_session.py
+nsxramlclient/xmloperations.py
+nsxramlclient.egg-info/PKG-INFO
+nsxramlclient.egg-info/SOURCES.txt
+nsxramlclient.egg-info/dependency_links.txt
+nsxramlclient.egg-info/pbr.json
+nsxramlclient.egg-info/requires.txt
+nsxramlclient.egg-info/top_level.txt
