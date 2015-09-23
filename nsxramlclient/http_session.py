@@ -21,9 +21,31 @@ __author__ = 'yfauser'
 import requests
 import xml.dom.minidom as md
 import sys
+import time
+from functools import wraps
 from collections import OrderedDict
 import xmloperations
 from lxml import etree as et
+import OpenSSL.SSL
+
+
+def retry(catchexception, tries=4, wait=3, backofftime=2):
+    def retry_decorator(f):
+        @wraps(f)
+        def function_retry(*args, **kwargs):
+            innertries = tries
+            innerwait = wait
+            while innertries > 1:
+                try:
+                    return f(*args, **kwargs)
+                except catchexception, e:
+                    print 'Error {} occured, retry in {} seconds'.format(str(e), innerwait)
+                    time.sleep(innerwait)
+                    innerwait *= backofftime
+                    innertries -= 1
+            return f(*args, **kwargs)
+        return function_retry
+    return retry_decorator
 
 
 class Session(object):
@@ -46,6 +68,7 @@ class Session(object):
         if self._suppress_warnings:
             requests.packages.urllib3.disable_warnings()
 
+    @retry(OpenSSL.SSL.SysCallError)
     def do_request(self, method, url, data=None, headers=None, params=None):
         """
         Handle API requests / responses transport

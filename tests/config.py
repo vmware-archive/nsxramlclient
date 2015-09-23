@@ -18,7 +18,8 @@
 
 __author__ = 'yfauser'
 
-nsxraml_file = '/Users/yfauser/Documents/Development/raml/nsxvraml/nsxvapiv614.raml'
-nsxmanager = 'nsxmgr-l-01a.corp.local'
+nsxraml_file = '/Users/yfauser/Documents/Development/vmware-org/nsxraml/nsxvapiv614.raml'
+nsxmanager = '172.17.100.61'
 nsx_username = 'admin'
-nsx_password = 'VMware1!'
+nsx_password = 'vmware'
+
