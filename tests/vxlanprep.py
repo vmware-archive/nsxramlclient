@@ -95,6 +95,7 @@ def wait_for_job_completion(session, job_id, completion_status):
             return True
         else:
             time.sleep(30)
+            status_poll_count += 1
 
     raise Exception('Timeout waiting for Job to complete')
 

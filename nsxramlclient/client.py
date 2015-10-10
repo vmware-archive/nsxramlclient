@@ -64,6 +64,7 @@ class NsxClient(object):
         :param uri_parameters: A dictionary with the URI Parameters expected by the resource
         :param request_body_dict: A dictionary containing the body parameter in the format
                {'baseObject': {nested parameters}}. You can use extract_resource_body_schema to create it
+        :param query_parameters_dict: A dictionary containing optional or mandatory query parameters
         :param additional_headers: a dictionary of additional Headers to send in your request, e.g. if-match used
                with the dfw calls
         :return: This method returns a dictionary containing the received header and body data
@@ -79,6 +80,7 @@ class NsxClient(object):
         :param uri_parameters: A dictionary with the URI Parameters expected by the resource
         :param request_body_dict: A dictionary containing the body parameter in the format
                {'baseObject': {nested parameters}}. You can use extract_resource_body_schema to create it
+        :param query_parameters_dict: A dictionary containing optional or mandatory query parameters
         :param additional_headers: a dictionary of additional Headers to send in your request, e.g. if-match used
                with the dfw calls
         :return: This method returns a dictionary containing the received header and body data
@@ -95,6 +97,7 @@ class NsxClient(object):
         :param uri_parameters: A dictionary with the URI Parameters expected by the resource
         :param request_body_dict: A dictionary containing the body parameter in the format
                {'baseObject': {nested parameters}}. You can use extract_resource_body_schema to create it
+        :param query_parameters_dict: A dictionary containing optional or mandatory query parameters
         :param additional_headers: a dictionary of additional Headers to send in your request, e.g. if-match used
                with the dfw calls
         :return: This method returns a dictionary containing the received header and body data
@@ -111,6 +114,7 @@ class NsxClient(object):
         :param uri_parameters: A dictionary with the URI Parameters expected by the resource
         :param request_body_dict: A dictionary containing the body parameter in the format
                {'baseObject': {nested parameters}}. You can use extract_resource_body_schema to create it
+        :param query_parameters_dict: A dictionary containing optional or mandatory query parameters
         :param additional_headers: a dictionary of additional Headers to send in your request, e.g. if-match used
                with the dfw calls
         :return: This method returns a dictionary containing the received header and body data
@@ -302,10 +306,10 @@ class NsxRaml(object):
         matched_resource = self.find_resource_recursively(display_name)
 
         assert matched_resource, 'The searched displayName could not be found in RAML File'
-        assert matched_resource[1].methods[method_options[method]].body, 'the resource does not have a ' \
-                                                                         'body schema in the RAML File'
         assert method_options[method] in matched_resource[1].methods, 'the resource does not support ' \
                                                                       'the {} method'.format(method)
+        assert matched_resource[1].methods[method_options[method]].body, 'the resource does not have a ' \
+                                                                         'body schema in the RAML File'
 
         matched_resource_body = matched_resource[1].methods[method_options[method]].body
 

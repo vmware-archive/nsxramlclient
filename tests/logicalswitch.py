@@ -25,7 +25,7 @@ import time
 
 TRANSPORT_ZONE = 'TZ'
 
-client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=False)
+client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
 
 # find the objectId of the Scope with the name of the Transport Zone

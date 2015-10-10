@@ -28,9 +28,9 @@ def vc_registration():
 
     vc_reg['vcInfo']['ipAddress'] = '172.17.100.60'
     vc_reg['vcInfo']['userName'] = 'administrator@vsphere.local'
-    vc_reg['vcInfo']['assignRoleToUser'] = 'enterprise_admin'
+    vc_reg['vcInfo']['assignRoleToUser'] = 'true'
     vc_reg['vcInfo']['password'] = 'vmware'
-    vc_reg['vcInfo']['certificateThumbprint'] = 'D8:E1:1F:C1:AD:F7:BA:08:34:0B:20:63:CE:2B:42:C3:CC:90:20:AE'
+    vc_reg['vcInfo']['certificateThumbprint'] = 'B1:22:F5:FD:BA:7A:C0:91:1A:66:D6:A6:A0:B6:82:23:C6:30:97:7E'
 
     s.view_body_dict(vc_reg)
 
