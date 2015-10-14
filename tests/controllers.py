@@ -26,17 +26,22 @@ from nsxramlclient.client import NsxClient
 import time
 
 
-s = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=False)
+s = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
 
 def create_controller():
     controller_spec = s.extract_resource_body_schema('nsxControllers', 'create')
 
-    controller_spec['controllerSpec']['datastoreId'] = 'datastore-37'
-    controller_spec['controllerSpec']['networkId'] = 'dvportgroup-36'
+    s.view_body_dict(controller_spec)
+
+    controller_spec['controllerSpec']['datastoreId'] = 'datastore-32'
+    controller_spec['controllerSpec']['networkId'] = 'network-34'
     controller_spec['controllerSpec']['resourcePoolId'] = 'domain-c26'
-    controller_spec['controllerSpec']['ipPoolId'] = 'ipaddresspool-2'
+    controller_spec['controllerSpec']['ipPoolId'] = 'ipaddresspool-1'
     controller_spec['controllerSpec']['password'] = 'VMware1!VMware1!'
+    controller_spec['controllerSpec']['deployType'] = 'small'
+
+    s.view_body_dict(controller_spec)
 
     create_response = s.create('nsxControllers', request_body_dict=controller_spec)
 
@@ -117,10 +122,10 @@ def update_controller_credentials():
 
 controller1_id, job_id_resp = create_controller()
 wait_for_controller(job_id_resp)
-controller2_id, job_id_resp = create_controller()
-wait_for_controller(job_id_resp)
-controller3_id, job_id_resp = create_controller()
-wait_for_controller(job_id_resp)
+#controller2_id, job_id_resp = create_controller()
+#wait_for_controller(job_id_resp)
+#controller3_id, job_id_resp = create_controller()
+#wait_for_controller(job_id_resp)
 read_all_controllers()
 update_controller_credentials()
 cluster_config()
