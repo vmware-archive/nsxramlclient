@@ -27,7 +27,7 @@ def create_network_scope(session):
     network_scope_spec = session.extract_resource_body_schema('vdnScopes', 'create')
 
     network_scope_spec['vdnScope']['name'] = 'TestVdnScope'
-    network_scope_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = 'domain-c7'
+    network_scope_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = 'domain-c26'
     network_scope_spec['vdnScope']['description'] = 'Some test description'
     network_scope_spec['vdnScope']['controlPlaneMode'] = 'UNICAST_MODE'
 
@@ -51,12 +51,12 @@ def get_scope_by_id(session, scope_id):
 def update_scope_by_id(session, scope_id):
     network_scope_spec = session.extract_resource_body_schema('vdnScopeAttribUpdate', 'update')
     network_scope_spec['vdnScope']['name'] = 'TestVdnScope'
-    network_scope_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = 'domain-c7'
+    network_scope_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = 'domain-c26'
     network_scope_spec['vdnScope']['objectId'] = scope_id
     network_scope_spec['vdnScope']['description'] = 'Updated description'
 
-    update_response = session.update('vdnScopeAttribUpdate', uri_parameters={'scopeId': scope_id}, request_body_dict=
-                                     network_scope_spec)
+    update_response = session.update('vdnScopeAttribUpdate', uri_parameters={'scopeId': scope_id},
+                                     request_body_dict=network_scope_spec)
 
     session.view_response(update_response)
 
@@ -77,4 +77,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
