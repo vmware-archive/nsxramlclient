@@ -60,6 +60,7 @@ def sec_group_delete_member(session, secgroupid, member_moref):
                                                                     'memberMoref': member_moref})
     session.view_response(add_response)
 
+
 def get_sec_group_valid_types(session):
     response = session.read('secGroupMemberTypes', uri_parameters={'scopeId': 'globalroot-0'})
     session.view_response(response)
@@ -98,8 +99,6 @@ def add_dynamic_match(session, secgroupid, criteria='VM.NAME', key='Web'):
     dynamic_member_def['dynamicSet']['dynamicCriteria']['key'] = 'VM.NAME'
     dynamic_member_def['dynamicSet']['dynamicCriteria']['value'] = 'Web'
     body_content['securitygroup'].update({'dynamicMemberDefinition': dynamic_member_def})
-    session.view_body_dict(body_content)
-
     update_sec_group(session, secgroupid, body_content)
 
 
