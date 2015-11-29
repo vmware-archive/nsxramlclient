@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # coding=utf-8
 #
 # Copyright © 2015 VMware, Inc. All Rights Reserved.
@@ -19,49 +20,40 @@
 from tests.config import *
 from nsxramlclient.client import NsxClient
 
-__author__ = 'yfauser'
+
+__author__ = 'shrirang'
 
 
-def create_nvc(session, domain='domain-c7'):
-    nwf_spec = session.extract_resource_body_schema('nwfabricConfig', 'update')
+def create_ha(session, edge_id='edge-1'):
+    ha_spec = session.extract_resource_body_schema('highAvailability', 'update')
 
-    nwf_spec['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = domain
+    ha_spec['highAvailability']['vnic'] = '1'
+    ha_spec['highAvailability']['ipAddresses']['ipAddress'] = '192.168.10.1/30'
+    ha_spec['highAvailability']['declareDeadTime'] = '6'
 
-    response = session.update('nwfabricConfig', request_body_dict=nwf_spec)
+    response = session.update('highAvailability', uri_parameters={'edgeId': edge_id}, request_body_dict=ha_spec)
 
     session.view_response(response)
 
 
-def get_nfw_features(session):
-    response = session.read('nwfabricFeatures')
+def get_ha(session, edge_id='edge-1'):
+    response = session.read('highAvailability', uri_parameters={'edgeId': edge_id})
     session.view_response(response)
 
 
-def get_nfw_status(session, resource='domain-c7'):
-    response = session.read('nwfabricStatus', query_parameters_dict={'resource': resource})
-    session.view_response(response)
-
-
-def delete_nfw(session, domain='domain-c7'):
-    nwf_spec = session.extract_resource_body_schema('nwfabricConfig', 'delete')
-
-    nwf_spec['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = domain
-
-    response = session.delete('nwfabricConfig', request_body_dict=nwf_spec)
-
+def delete_ha(session, edge_id='edge-1'):
+    response = session.delete('highAvailability', uri_parameters={'edgeId': edge_id})
     session.view_response(response)
 
 
 def main():
     session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
-    create_nvc(session)
+    create_ha(session)
 
-    get_nfw_features(session)
+    get_ha(session)
 
-    get_nfw_status(session)
-
-    delete_nfw(session)
+    delete_ha(session)
 
 
 if __name__ == "__main__":
