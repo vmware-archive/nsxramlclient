@@ -59,7 +59,7 @@ def logical_switch_list (client_session):
         switch_list.append((scope['name'],scope['objectId']))
     from tabulate import tabulate
     print tabulate(switch_list, headers=["LS name","LS ID"],tablefmt="psql")
-
+#######
 
 def main():
     parser = argparse.ArgumentParser(description="nsxv function for logical switch '%(prog)s @params.conf'.",
