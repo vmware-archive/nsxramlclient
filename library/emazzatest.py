@@ -21,8 +21,41 @@ def logical_switch_create(client_session, transport_zone, logical_switch_name, c
     # create new lswitch
     new_ls = client_session.create('logicalSwitches', uri_parameters={'scopeId': vdn_scope},
                                    request_body_dict=lswitch_create_dict)
-    client_session.view_response(new_ls)
+    # client_session.view_response(new_ls)
+    logical_switch_id = new_ls['objectId']
+    print "Logical Switch %s has the ID %s." % (logical_switch_name, logical_switch_id)
+    return logical_switch_id
 
+def logical_switch_delete (client_session, logical_switch_name):
+    # Find Logical Switch ID
+    # TODO works only for the first 20 LS
+    all_lswitches = client_session.read('logicalSwitchesGlobal', 'read')['body']['virtualWires']['dataPage']
+    all_switches_dict_list = [scope_dict for scope_dict in all_lswitches['virtualWire']]
+    logical_switch_id = [scope['objectId'] for scope in all_switches_dict_list if scope['name'] == logical_switch_name][0]
+
+ # Delete the LS
+    client_session.delete('logicalSwitch', uri_parameters={'virtualWireID': logical_switch_id})
+    print "Logical Switch %s with the ID %s has been deleted." % (logical_switch_name, logical_switch_id)
+    return True
+
+def logical_switch_read (client_session, logical_switch_name):
+    # Find Logical Switch ID
+    # TODO works only for the first 20 LS
+    all_lswitches = client_session.read('logicalSwitchesGlobal', 'read')['body']['virtualWires']['dataPage']
+    all_switches_dict_list = [scope_dict for scope_dict in all_lswitches['virtualWire']]
+    logical_switch_id = [scope['objectId'] for scope in all_switches_dict_list if scope['name'] == logical_switch_name][0]
+
+ # Read the LS
+    print "Logical Switch %s has the ID %s." % (logical_switch_name, logical_switch_id)
+    return logical_switch_id
+
+def logical_switch_list (client_session):
+    # Find Logical Switch ID
+    # TODO works only for the first 20 LS
+    all_lswitches = client_session.read('logicalSwitchesGlobal', 'read')['body']['virtualWires']['dataPage']
+    all_switches_dict_list = [scope_dict for scope_dict in all_lswitches['virtualWire']]
+    logical_switch_id = [scope['objectId'] for scope in all_switches_dict_list if scope['name'] == logical_switch_name][0]
+    logical_switch_name = [scope['objectId'] for scope in all_switches_dict_list if scope['name'] == logical_switch_name][0]
 
 def main():
     parser = argparse.ArgumentParser(description="nsxv function for logical switch '%(prog)s @params.conf'.",
