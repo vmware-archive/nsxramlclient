@@ -1,4 +1,5 @@
 from nsxramlclient.client import NsxClient
+from tabulate import tabulate
 import argparse
 import ConfigParser
 
@@ -23,31 +24,57 @@ def logical_switch_create(client_session, transport_zone, logical_switch_name, c
                                    request_body_dict=lswitch_create_dict)
     # client_session.view_response(new_ls)
     logical_switch_id = new_ls['objectId']
-    print "Logical Switch %s has the ID %s." % (logical_switch_name, logical_switch_id)
     return logical_switch_id
 
-def logical_switch_delete (client_session, logical_switch_name):
+def _logical_switch_create(client_session, **kwargs):
+    transport_zone = kwargs['transport_zone']
+    logical_switch_name = kwargs['logical_switch_name']
+    print 'Logical Switch {} has the ID {}'.format(logical_switch_name,
+                                                    logical_switch_create(client_session,
+                                                                          transport_zone,
+                                                                          logical_switch_name))
+
+def logical_switch_delete(client_session, logical_switch_name):
     # Find Logical Switch ID
     # TODO works only for the first 20 LS
     all_lswitches = client_session.read('logicalSwitchesGlobal', 'read')['body']['virtualWires']['dataPage']
     all_switches_dict_list = [scope_dict for scope_dict in all_lswitches['virtualWire']]
-    logical_switch_id = [scope['objectId'] for scope in all_switches_dict_list if scope['name'] == logical_switch_name][0]
-
+    try:
+        logical_switch_id = [scope['objectId'] for scope in all_switches_dict_list if
+                             scope['name'] == logical_switch_name][0]
+    except IndexError:
+        return False, None
  # Delete the LS
     client_session.delete('logicalSwitch', uri_parameters={'virtualWireID': logical_switch_id})
-    print "Logical Switch %s with the ID %s has been deleted." % (logical_switch_name, logical_switch_id)
-    return True
+    return True, logical_switch_id
+
+def _logical_switch_delete (client_session, **kwargs):
+    logical_switch_name = kwargs['logical_switch_name']
+    result = logical_switch_delete(client_session, logical_switch_name)
+    if result[0]:
+        print 'Logical Switch {} with the ID {} has been deleted'.format (logical_switch_name, result[1])
+    else:
+        print 'Logical Switch deletion failed'
 
 def logical_switch_read (client_session, logical_switch_name):
     # Find Logical Switch ID
     # TODO works only for the first 20 LS
     all_lswitches = client_session.read('logicalSwitchesGlobal', 'read')['body']['virtualWires']['dataPage']
     all_switches_dict_list = [scope_dict for scope_dict in all_lswitches['virtualWire']]
-    logical_switch_id = [scope['objectId'] for scope in all_switches_dict_list if scope['name'] == logical_switch_name][0]
-
- # Read the LS
-    print "Logical Switch %s has the ID %s." % (logical_switch_name, logical_switch_id)
+    try:
+        logical_switch_id = [scope['objectId'] for scope in all_switches_dict_list if
+                             scope['name'] == logical_switch_name][0]
+    except IndexError:
+        return None
     return logical_switch_id
+
+def _logical_switch_read (client_session, **kwargs):
+    logical_switch_name = kwargs['logical_switch_name']
+    result = logical_switch_read(client_session, logical_switch_name)
+    if result:
+        print 'Logical Switch {} has the ID {}'.format(logical_switch_name, result)
+    else:
+        print 'Logical Switch {} not found'.format(logical_switch_name)
 
 def logical_switch_list (client_session):
     # Find Logical Switch ID
@@ -57,13 +84,18 @@ def logical_switch_list (client_session):
     switch_list = []
     for scope in all_switches_dict_list:
         switch_list.append((scope['name'],scope['objectId']))
-    from tabulate import tabulate
-    print tabulate(switch_list, headers=["LS name","LS ID"],tablefmt="psql")
-#######
+    return switch_list
+
+def _logical_switch_list_print(client_session, **kwargs):
+    print tabulate(logical_switch_list (client_session), headers=["LS name","LS ID"],tablefmt="psql")
 
 def main():
     parser = argparse.ArgumentParser(description="nsxv function for logical switch '%(prog)s @params.conf'.",
                                      fromfile_prefix_chars='@')
+    parser.add_argument("command", help="create: create a new logical switch"
+                                        "read: return the virtual wire id of a logical switch"
+                                        "delete: delete a logical switch"
+                                        "list: return a list of all logical switches")
     parser.add_argument("-i",
                         "--ini",
                         help="nsx configuration file",
@@ -94,11 +126,20 @@ def main():
         transport_zone = config.get('defaults', 'transport_zone')
 
     # print ('test "{}"'.format(transport_zone))
-    session = NsxClient(config.get('nsxraml', 'nsxraml_file'), config.get('nsxv', 'nsx_manager'),
+    client_session = NsxClient(config.get('nsxraml', 'nsxraml_file'), config.get('nsxv', 'nsx_manager'),
                         config.get('nsxv', 'nsx_username'), config.get('nsxv', 'nsx_password'), debug=debug)
 
-    logical_switch_create(session, transport_zone, args.name)
-
+    try:
+        command_selector = {
+            'list': _logical_switch_list_print,
+            'create': _logical_switch_create,
+            'delete': _logical_switch_delete,
+            'read': _logical_switch_read,
+            }
+        command_selector[args.command](client_session, transport_zone=transport_zone, logical_switch_name=args.name)
+    except KeyError:
+        print('Unknown command')
+        parser.print_help()
 
 if __name__ == "__main__":
     main()
