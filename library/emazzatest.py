@@ -58,7 +58,7 @@ def logical_switch_list (client_session):
     for scope in all_switches_dict_list:
         switch_list.append((scope['name'],scope['objectId']))
     from tabulate import tabulate
-    print tabulate(switch_list, tablefmt="psql")
+    print tabulate(switch_list, headers=["LS name","LS ID"],tablefmt="psql")
 
 
 def main():
