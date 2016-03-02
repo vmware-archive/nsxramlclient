@@ -23,7 +23,7 @@ from nsxramlclient.client import NsxClient
 import time
 
 
-TRANSPORT_ZONE = 'TZ'
+TRANSPORT_ZONE = 'TZ1'
 
 client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
@@ -39,7 +39,7 @@ client_session.view_body_dict(lswitch_create_dict)
 
 # fill the details for the new lswitch in the body dict
 lswitch_create_dict['virtualWireCreateSpec']['controlPlaneMode'] = 'UNICAST_MODE'
-lswitch_create_dict['virtualWireCreateSpec']['name'] = 'TestLogicalSwitch1'
+lswitch_create_dict['virtualWireCreateSpec']['name'] = 'Emanuele'
 lswitch_create_dict['virtualWireCreateSpec']['tenantId'] = 'Tenant1'
 
 # create new lswitch
@@ -70,7 +70,7 @@ update_resp = client_session.update('logicalSwitch', uri_parameters={'virtualWir
 time.sleep(5)
 
 # delete new logical created ealier
-client_session.delete('logicalSwitch', uri_parameters={'virtualWireID': new_ls['objectId']})
+#client_session.delete('logicalSwitch', uri_parameters={'virtualWireID': new_ls['objectId']})
 
 #TODO: test moving a VM to the new logical switch
 # move a VM to a logical switch
