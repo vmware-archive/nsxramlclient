@@ -18,15 +18,17 @@
 
 __author__ = 'yfauser'
 
-import requests
 import xml.dom.minidom as md
 import sys
 import time
 from functools import wraps
 from collections import OrderedDict
-import xmloperations
+
+import requests
 from lxml import etree as et
 import OpenSSL.SSL
+
+import xmloperations
 
 
 def retry(catchexception, tries=4, wait=3, backofftime=2):
