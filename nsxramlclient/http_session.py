@@ -27,6 +27,7 @@ from collections import OrderedDict
 import requests
 from lxml import etree as et
 import OpenSSL.SSL
+import json
 
 import xmloperations
 
@@ -110,6 +111,8 @@ class Session(object):
         elif 'content-type' in response.headers:
             if response.headers['content-type'].find('application/xml') != -1:
                 response_content = xmloperations.xml_to_dict(et.fromstring(response.content))
+            elif response.headers['content-type'].find('application/json') != -1:
+                response_content = json.loads(response.content)
             else:
                 response_content = response.content
 
