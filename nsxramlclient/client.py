@@ -207,12 +207,13 @@ class NsxClient(object):
 
     def read_all_pages(self, searched_resource, uri_parameters=None, request_body_dict=None,
                        query_parameters_dict=None, additional_headers=None):
-        supported_objects = ['virtualWires']
+        supported_objects = ['virtualWires', 'pagedEdgeList']
         first_page = self._request(searched_resource, 'get', uri_parameters, request_body_dict, query_parameters_dict,
                                    additional_headers)['body']
         first_key = first_page.keys()[0]
         assert first_key in supported_objects, 'unsupported object {}, currently only {} ' \
                                                'are supported'.format(first_key, supported_objects)
+
         if first_key == 'virtualWires':
             paging_info = first_page['virtualWires']['dataPage']['pagingInfo']
             total_count = int(paging_info['totalCount'])
@@ -238,6 +239,33 @@ class NsxClient(object):
                     collected_values.extend(sub_page['virtualWires']['dataPage']['virtualWire'])
 
             return collected_values
+
+        if first_key == 'pagedEdgeList':
+            paging_info = first_page['pagedEdgeList']['edgePage']['pagingInfo']
+            total_count = int(paging_info['totalCount'])
+            page_size = int(paging_info['pageSize'])
+            start_index = int(paging_info['startIndex'])
+            if not query_parameters_dict:
+                query_parameters_dict = {'pagesize': paging_info['pageSize'], 'startindex': paging_info['startIndex']}
+            if total_count == 0:
+                return []
+            elif total_count == 1:
+                return [first_page['pagedEdgeList']['edgePage']['edgeSummary']]
+            elif page_size >= total_count:
+                return first_page['pagedEdgeList']['edgePage']['edgeSummary']
+
+            collected_values = first_page['pagedEdgeList']['edgePage']['edgeSummary']
+            for page_start_index in range(start_index+page_size, total_count, page_size):
+                query_parameters_dict['startindex'] = str(page_start_index)
+                sub_page = self._request(searched_resource, 'get', uri_parameters, request_body_dict,
+                                         query_parameters_dict, additional_headers)['body']
+                if isinstance(sub_page['pagedEdgeList']['edgePage']['edgeSummary'], dict):
+                    collected_values.append(sub_page['pagedEdgeList']['edgePage']['edgeSummary'])
+                if isinstance(sub_page['pagedEdgeList']['edgePage']['edgeSummary'], list):
+                    collected_values.extend(sub_page['pagedEdgeList']['edgePage']['edgeSummary'])
+
+            return collected_values
+
 
     @staticmethod
     def normalize_list_return(input_object):
