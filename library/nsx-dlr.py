@@ -27,14 +27,23 @@ from tabulate import tabulate
 from nsxramlclient.client import NsxClient
 
 
-def logical_switch_create(client_session, transport_zone, logical_switch_name, control_plane_mode=None):
+def dlr_create(client_session, dlr_name, admin_pwd, cluster_id, datastore_id,
+               mgt_ls_id, mgt_ip, mgt_subnet, uplink_ls_id, uplink_ip, uplink_subnet, dgw_ip):
     """
-    This function will create a new logical switch in NSX
+    This function will create a new dlr in NSX
     :param client_session: An instance of an NsxClient Session
-    :param transport_zone: The name of the Scope (Transport Zone)
-    :param logical_switch_name: The name that will be assigned to the new logical switch
-    :param control_plane_mode: (Optional) Control Plane Mode, uses the Transport Zone default if not specified
-    :return: returns a tuple, the first item is the logical switch ID in NSX as string, the second is string
+    :param dlr_name: The name that will be assigned to the new dlr
+    :param admin_pwd: The admin password of new dlr
+    :param cluster_id: The vCenter Cluster ID where dlr control vm will be deployed
+    :param datastore_id: The vCenter datastore ID where dlr control vm will be deployed
+    :param mgt_ls_id: New dlr management logical switch id or vds port group
+    :param mgt_ip: New dlr management ip@
+    :param mgt_subnet: New dlr management subnet
+    :param uplink_ls_id: New dlr uplink logical switch id or vds port group
+    :param uplink_ip: New dlr uplink ip@
+    :param uplink_subnet: New dlr uplink subnet
+    :param dgw_ip: New dlr default gateway
+    :return: returns a tuple, the first item is the dlr ID in NSX as string, the second is string
              containing the logical switch URL location as returned from the API
     """
     vdn_scope_id, vdn_scope = get_scope(client_session, transport_zone)
@@ -51,7 +60,7 @@ def logical_switch_create(client_session, transport_zone, logical_switch_name, c
     lswitch_create_dict['virtualWireCreateSpec']['tenantId'] = ''
 
     # create new lswitch
-    new_ls = client_session.create('logicalSwitches', uri_parameters={'scopeId': vdn_scope_id},
+    new_ls = client_session.create('nsxEdges', uri_parameters={'scopeId': vdn_scope_id},
                                    request_body_dict=lswitch_create_dict)
     return new_ls['body'], new_ls['location']
 
@@ -198,4 +207,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
