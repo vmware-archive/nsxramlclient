@@ -52,7 +52,22 @@ retry the pip installation of the nsxramlclient shown above.
 
 .. code:: sh
 
-    sudo apt-get install libxml2-dev libxslt-dev python-dev zlib1g-dev
+    sudo apt-get install build-essential libssl-dev libffi-dev libxml2-dev libxslt-dev python-dev zlib1g-dev
+
+Also sometimes you might run into the issue of missing Python OpenSSL on
+your Ubuntu machine. In this case you will see the following error
+message when importing nsxramlclient.client:
+
+.. code:: sh
+
+    ImportError: No module named OpenSSL.SSL
+
+if you encounter this, simply install the package python-openssl
+manually:
+
+.. code:: sh
+
+    sudo apt-get install python-openssl
 
 Examples on how to use nsxramlclient
 ====================================
