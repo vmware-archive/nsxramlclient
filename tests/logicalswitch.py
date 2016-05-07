@@ -23,7 +23,7 @@ from nsxramlclient.client import NsxClient
 import time
 
 
-TRANSPORT_ZONE = 'TZ'
+TRANSPORT_ZONE = 'TZ1'
 
 client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
@@ -34,7 +34,7 @@ vdn_scope_dict_list = [scope_dict for scope_dict in vdn_scopes['vdnScopes'].item
 vdn_scope = [scope[1]['objectId'] for scope in vdn_scope_dict_list if scope[1]['name'] == TRANSPORT_ZONE][0]
 
 # get a template dict for the lswitch create
-lswitch_create_dict = client_session.extract_resource_body_schema('logicalSwitches', 'create')
+lswitch_create_dict = client_session.extract_resource_body_example('logicalSwitches', 'create')
 client_session.view_body_dict(lswitch_create_dict)
 
 # fill the details for the new lswitch in the body dict
@@ -74,8 +74,8 @@ client_session.delete('logicalSwitch', uri_parameters={'virtualWireID': new_ls['
 
 #TODO: test moving a VM to the new logical switch
 # move a VM to a logical switch
-vm_attach_body_dict = client_session.extract_resource_body_schema('logicalSwitchVmAttach', 'read')
-client_session.view_body_dict(vm_attach_body_dict)
+#vm_attach_body_dict = client_session.extract_resource_body_example('logicalSwitchVmAttach', 'read')
+#client_session.view_body_dict(vm_attach_body_dict)
 
 #vm_attach_body_dict['com.vmware.vshield.vsm.inventory.dto.VnicDto']['objectId'] = ''
 #vm_attach_body_dict['com.vmware.vshield.vsm.inventory.dto.VnicDto']['portgroupId'] = new_ls['objectId']

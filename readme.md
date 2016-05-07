@@ -5,6 +5,28 @@ This Python based client for NSX for vSphere 6.x gets its API structure informat
 
 The latest version of the NSX for vSphere 6.x RAML file can be found at http://github.com/vmware/nsxraml
 
+#### NOTE: Please read the bellow Version information. The 2.0 Version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled. If you are using the 1.x version of nsxramlclient you will need to use the 6.1.4, 6.1.6 or 6.2.2 versions of the nsx raml spec. In the 2.0 version the method `extract_resource_body_schema` was replaced with `extract_resource_body_example`
+
+# Version History
+
+### Version 2.0
+This version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled.
+In the new NSX-v RAML spec schemas are now real schemas that can be used to check the correctness of your XML document.
+In the earlier versions the schema was used to return an XML example as a python Dict. 
+The new way of retrieving the XML example dict is by using the new method introduced in the 2.0 version named `extract_resource_body_example`
+
+### Version 1.0.4
+This release introduces new helper methods:
+
+`read_all_pages`:
+This Method reads all pages from the API Get for the ['virtualWires', 'pagedEdgeList'] displayNames. This e.g. helps to collect all logical switches present in the system without having to know the needed page file size
+
+`normalize_list_return`:
+There are API calls in NSX-v were you are getting a None object if no Object is present, a Dict type when only one Object is present, and a List of Dicts when more than one Object is present. E.g. for the retrieval of logical switches. When passing the API return to this function it will normalize the return to be a list. If the input is a None Object (no Object exists in NSX-v) an empty list is return. When one Object is found, a List with the one Dict is returned, when the input is a list, it is returned back unmodified
+
+### Version 1.0.2 and 1.0.1
+Initial versions
+
 # How to install nsxramlclient
 
 The following install instructions  are based on Ubuntu 14.04 LTS, but installations on other Linux distributions
@@ -100,12 +122,22 @@ Each of the above methods returns a Python OrderedDictionary with the HTTP Statu
 location header, NSX Object Id, eTag Header and Body. This method outputs the OrderedDict in human readable text to stdout.
 
 - extract_resource_body_schema: 
+DEPRECATION WARING: Use the method extract_resource_body_schema. In future version this will be removed
 This method will retrieve the body schema from the RAML File (if the
 method has a body schema like most create methods), and will return a
 template python dictionary that can be used to construct subsequent API calls.
 
+- extract_resource_body_example:
+This method will retrieve the body example from the RAML File (if the
+method has a body example like most create methods), and will return a
+template python dictionary that can be used to construct subsequent API calls.
+
 - view_resource_body_schema: 
 This method retrieves the body schema from the RAML file and outputs
+it to stdout as a pretty printed XML document.
+
+- view_resource_body_example: 
+This method retrieves the body example from the RAML file and outputs
 it to stdout as a pretty printed XML document.
 
 - view_body_dict: 
@@ -173,9 +205,9 @@ It is possible to use URI and query parameters concurrently in any call and add 
 If a resource requires a body to be supplied with data the body can be composed in the following way:
 
 Check what the body of a call needs to look like by retrieving it out of the RAML file, 
-and displaying it to stdout using ```view_resource_body_schema```:
+and displaying it to stdout using ```view_resource_body_example```:
 ```python
-In [9]: client_session.view_resource_body_schema('logicalSwitches', 'create')
+In [9]: client_session.view_resource_body_example('logicalSwitches', 'create')
 
 <virtualWireCreateSpec>
     <name>mandatory</name>
@@ -184,9 +216,9 @@ In [9]: client_session.view_resource_body_schema('logicalSwitches', 'create')
     <controlPlaneMode>mandatory</controlPlaneMode>
 </virtualWireCreateSpec>
 ```
-It is possible to create a template python dictionary using ```extract_resource_body_schema``` and display the output  structure in a human readable format to stdout:
+It is possible to create a template python dictionary using ```extract_resource_body_example``` and display the output  structure in a human readable format to stdout:
 ```python
-In [10]: new_ls = client_session.extract_resource_body_schema('logicalSwitches', 
+In [10]: new_ls = client_session.extract_resource_body_example('logicalSwitches', 
 															  'create')
 
 In [11]: client_session.view_body_dict(new_ls)
@@ -257,7 +289,7 @@ Note that the ```If-match``` header is supplied by the ```additional_headers``` 
 
 Some resources in NSX expect values to be set in XML Tags. This example shows a dfw resource:
 ```python
-In [18]: client_session.view_resource_body_schema('dfwL3Rules', 'create')
+In [18]: client_session.view_resource_body_example('dfwL3Rules', 'create')
 <rule disabled="false" logged="false">
     <name>AddRuleTest</name>
     <action>allow</action>
@@ -267,7 +299,7 @@ In [18]: client_session.view_resource_body_schema('dfwL3Rules', 'create')
 The ```rule```has the Tags ```disabled``` and ```logged```. When this type of Tag
 is found, it is converted to a key prefixed by ```@``` in the resulting dictionary:
 ```python
-In [19]: l3rule = client_session.extract_resource_body_schema('dfwL3Rules', 
+In [19]: l3rule = client_session.extract_resource_body_example('dfwL3Rules', 
                                                               'create')
 In [20]: client_session.view_body_dict(l3rule)
 {'rule': {'@disabled': 'false',
@@ -285,7 +317,7 @@ l3section_bdict['section']['rule'][0]['@logged'] = 'true'
 
 In some cases NSX uses lists of parameters with repeating keys. For example:
 ```python
-In [21]: client_session.view_resource_body_schema('dfwL3Section', 'create')
+In [21]: client_session.view_resource_body_example('dfwL3Section', 'create')
 <section name="Test">
     <rule disabled="false" logged="true">
         <name/>
@@ -345,7 +377,7 @@ To be able to work with python dictionaries, nsxramlclient will convert those li
 named parameter 'groups' to a Python list containing dictionaries.
 This example shows the resulting Python dictionary for this type of resource body schema:
 ```python
-In [22]: dfw_l3_sec = client_session.extract_resource_body_schema('dfwL3Section', 
+In [22]: dfw_l3_sec = client_session.extract_resource_body_example('dfwL3Section', 
                                                                   'create')
 In [31]: client_session.view_body_dict(dfw_l3_sec)
 {'section': {'@name': 'Test',

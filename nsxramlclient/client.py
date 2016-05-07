@@ -165,8 +165,20 @@ class NsxClient(object):
         xml_schema_result = self._nsxraml.get_xml_schema_by_displayname(searched_resource, method)
         print et.tostring(xml_schema_result, pretty_print=True)
 
+    def view_resource_body_example(self, searched_resource, method):
+        xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method)
+        print et.tostring(xml_schema_result, pretty_print=True)
+
     def extract_resource_body_schema(self, searched_resource, method):
+        # NOTE: THis method is deprecated and will be removed in future version
         xml_schema_result = self._nsxraml.get_xml_schema_by_displayname(searched_resource, method)
+        print '\033[91m' + "DEPRECATION WARNING: This method is deprecated in nsxramlclient v2.x and " \
+                           "will be removed in future.\nPlease start using the method extract_resource_body_example " \
+                           "instead.\nThis method does not support the NSXv 6.2.4 and later RAML specs" + '\033[0m'
+        return xmloperations.xml_to_dict(xml_schema_result)
+
+    def extract_resource_body_example(self, searched_resource, method):
+        xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method)
         return xmloperations.xml_to_dict(xml_schema_result)
 
     @staticmethod
@@ -265,7 +277,6 @@ class NsxClient(object):
                     collected_values.extend(sub_page['pagedEdgeList']['edgePage']['edgeSummary'])
 
             return collected_values
-
 
     @staticmethod
     def normalize_list_return(input_object):
@@ -377,6 +388,7 @@ class NsxRaml(object):
         return url
 
     def get_xml_schema_by_displayname(self, display_name, method):
+        # NOTE: THis method is deprecated and will be removed in future versions
         method_options = {'read': 'get', 'create': 'post', 'delete': 'delete', 'update': 'put'}
         matched_resource = self.find_resource_recursively(display_name)
 
@@ -401,6 +413,26 @@ class NsxRaml(object):
                                                 'misformated'.format(matched_resource_body['application/xml'].schema)
 
             return self._nsxraml.schemas[matched_resource_body['application/xml'].schema]
+
+    def get_xml_example_by_displayname(self, display_name, method):
+        method_options = {'read': 'get', 'create': 'post', 'delete': 'delete', 'update': 'put'}
+        matched_resource = self.find_resource_recursively(display_name)
+
+        assert matched_resource, 'The searched displayName could not be found in RAML File'
+        assert method_options[method] in matched_resource[1].methods, 'the resource does not support ' \
+                                                                      'the {} method'.format(method)
+        assert matched_resource[1].methods[method_options[method]].body, 'the resource does not have a ' \
+                                                                         'body schema in the RAML File'
+
+        matched_resource_body = matched_resource[1].methods[method_options[method]].body
+        example = matched_resource_body['application/xml'].example
+        try:
+            example_et = et.fromstring(example)
+        except et.XMLSyntaxError as e:
+            raise Exception('The parsing of the body example XML failed, please check the format in the RAML file,'
+                            'the execption is:\n{}'.format(e))
+
+        return example_et
 
     @staticmethod
     def _collect_resource_details(resource_tuple):
