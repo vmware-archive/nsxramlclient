@@ -30,7 +30,7 @@ s = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
 
 def create_controller():
-    controller_spec = s.extract_resource_body_schema('nsxControllers', 'create')
+    controller_spec = s.extract_resource_body_example('nsxControllers', 'create')
 
     s.view_body_dict(controller_spec)
 
@@ -94,7 +94,7 @@ def controller_techsupport(controller_id):
 
 
 def set_controller_syslog(controller_id):
-    syslog_spec = s.extract_resource_body_schema('nsxControllerSyslog', 'create')
+    syslog_spec = s.extract_resource_body_example('nsxControllerSyslog', 'create')
     syslog_spec['controllerSyslogServer']['syslogServer'] = '172.17.100.129'
     s.view_body_dict(syslog_spec)
     set_response = s.create('nsxControllerSyslog', uri_parameters={'controllerId': controller_id},
@@ -113,7 +113,7 @@ def get_controller_syslog(controller_id):
 
 
 def update_controller_credentials():
-    password_spec = s.extract_resource_body_schema('nsxControllerPassword', 'update')
+    password_spec = s.extract_resource_body_example('nsxControllerPassword', 'update')
     password_spec['controllerCredential']['apiPassword'] = 'VMware-12345!'
     s.view_body_dict(password_spec)
     response = s.update('nsxControllerPassword', request_body_dict=password_spec)

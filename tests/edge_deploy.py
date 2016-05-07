@@ -24,7 +24,7 @@ from nsxramlclient.client import NsxClient
 s = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
 def create_edge():
-    edge_template = s.extract_resource_body_schema('nsxEdges', 'create')
+    edge_template = s.extract_resource_body_example('nsxEdges', 'create')
 
     s.view_body_dict(edge_template)
 

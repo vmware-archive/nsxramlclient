@@ -49,7 +49,7 @@ def get_sg_group_id(session, sec_group_name):
 
 
 def sec_empty_policy_create(session):
-    policy_create_dict = session.extract_resource_body_schema('securityPolicy', 'create')
+    policy_create_dict = session.extract_resource_body_example('securityPolicy', 'create')
     session.view_body_dict(policy_create_dict)
 
     policy_create_dict['securityPolicy']['name'] = 'TestPolicy'
@@ -72,7 +72,7 @@ def sec_policy_read(session, objectid='all'):
 
 def sec_policy_add_fw_rule(session, objectid):
     policy_config = session.read('securityPolicyID', uri_parameters={'ID': objectid})['body']
-    policy_create_dict = session.extract_resource_body_schema('securityPolicy', 'create')
+    policy_create_dict = session.extract_resource_body_example('securityPolicy', 'create')
     fw_action = policy_create_dict['securityPolicy']['actionsByCategory']['action']
     fw_action['@class'] = 'firewallSecurityAction'
     fw_action['category'] = 'firewall'

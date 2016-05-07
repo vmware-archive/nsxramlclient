@@ -24,7 +24,7 @@ __author__ = 'shrirang'
 
 
 def create_network_scope(session):
-    network_scope_spec = session.extract_resource_body_schema('vdnScopes', 'create')
+    network_scope_spec = session.extract_resource_body_example('vdnScopes', 'create')
 
     network_scope_spec['vdnScope']['name'] = 'TestVdnScope'
     network_scope_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = 'domain-c26'
@@ -49,7 +49,7 @@ def get_scope_by_id(session, scope_id):
 
 
 def update_scope_by_id(session, scope_id):
-    network_scope_spec = session.extract_resource_body_schema('vdnScopeAttribUpdate', 'update')
+    network_scope_spec = session.extract_resource_body_example('vdnScopeAttribUpdate', 'update')
     network_scope_spec['vdnScope']['name'] = 'TestVdnScope'
     network_scope_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = 'domain-c26'
     network_scope_spec['vdnScope']['objectId'] = scope_id

@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def create_monitor(session, edge_id='edge-1'):
-    monitor_spec = session.extract_resource_body_schema('lbMonitors', 'create')
+    monitor_spec = session.extract_resource_body_example('lbMonitors', 'create')
 
     monitor_spec['monitor']['type'] = 'http'
     monitor_spec['monitor']['interval'] = '5'
@@ -54,7 +54,7 @@ def get_monitors(session, edge_id='edge-1'):
 
 
 def update_monitor(session, object_id, edge_id='edge-1'):
-    monitor_spec = session.extract_resource_body_schema('lbMonitor', 'update')
+    monitor_spec = session.extract_resource_body_example('lbMonitor', 'update')
 
     monitor_spec['monitor']['type'] = 'http'
     monitor_spec['monitor']['interval'] = '5'

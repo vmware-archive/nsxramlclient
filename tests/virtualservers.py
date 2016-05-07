@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def create_virtualserver(session, edge_id='edge-1', app_profile='applicationProfile-4', pool_id = 'pool-5'):
-    virtualserver_spec = session.extract_resource_body_schema('virtualServers', 'create')
+    virtualserver_spec = session.extract_resource_body_example('virtualServers', 'create')
 
     virtualserver_spec['virtualServer']['name'] = 'http_vip_2'
     virtualserver_spec['virtualServer']['description'] = 'http virtualServer 2'

@@ -25,7 +25,7 @@ import time
 
 client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
-macset_dict = client_session.extract_resource_body_schema('macsetScopeCreate', 'create')
+macset_dict = client_session.extract_resource_body_example('macsetScopeCreate', 'create')
 macset_dict['macset']['name'] = 'test0'
 
 # CREATE macset on scope

@@ -63,7 +63,7 @@ def readByIds():
 
 def createNewL3Section():
 
-    l3section_bdict = client_session.extract_resource_body_schema('dfwL3Section', 'create')
+    l3section_bdict = client_session.extract_resource_body_example('dfwL3Section', 'create')
 
     service_dict = l3section_bdict['section']['rule'][0]['services']
     service_dict['service']['destinationPort'] = 80
@@ -144,7 +144,7 @@ def L3Rules(section_name):
     section_id = l3_dfw_by_name_response['body']['section']['@id']
     etag_value = l3_dfw_by_name_response['Etag']
 
-    l3_rule_dict = client_session.extract_resource_body_schema('dfwL3Rules', 'create')
+    l3_rule_dict = client_session.extract_resource_body_example('dfwL3Rules', 'create')
 
     l3_rule_dict['rule'].pop('services')
     l3_rule_dict['rule']['destinations']['destination'].pop(1)
@@ -215,7 +215,7 @@ def deleteL3Sections(section_name):
 
 def createNewL2Section():
 
-    l2section_bdict = client_session.extract_resource_body_schema('dfwL2Section', 'create')
+    l2section_bdict = client_session.extract_resource_body_example('dfwL2Section', 'create')
 
     source_dict = l2section_bdict['section']['rule'][0]['sources']['source'][0]
 
@@ -259,7 +259,7 @@ def L2Rules(section_name):
     section_id = l2_dfw_by_name_response['body']['section']['@id']
     etag_value = l2_dfw_by_name_response['Etag']
 
-    l2_rule_dict = client_session.extract_resource_body_schema('dfwL3Rules', 'create')
+    l2_rule_dict = client_session.extract_resource_body_example('dfwL3Rules', 'create')
 
     l2_rule_dict['rule'].pop('services')
     l2_rule_dict['rule']['destinations']['destination'].pop(1)

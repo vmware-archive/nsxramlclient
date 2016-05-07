@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def update_locale(session):
-    locale_info = session.extract_resource_body_schema('systemLocale', 'update')
+    locale_info = session.extract_resource_body_example('systemLocale', 'update')
 
     locale_info['locale']['language'] = 'en'
     locale_info['locale']['country'] = 'US'

@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def create_backend_pool(session, edge_id='edge-1'):
-    backend_pool_spec = session.extract_resource_body_schema('pools', 'create')
+    backend_pool_spec = session.extract_resource_body_example('pools', 'create')
 
     backend_pool_spec['pool']['name'] = 'pool-tcp-snat-2'
     backend_pool_spec['pool']['description'] = 'pool-tcp-snat-2'
@@ -59,7 +59,7 @@ def backend_pool(session, edge_id='edge-1'):
 
 
 def update_backend_pool(session, object_id, edge_id='edge-1'):
-    backend_pool_spec = session.extract_resource_body_schema('pool', 'update')
+    backend_pool_spec = session.extract_resource_body_example('pool', 'update')
 
     backend_pool_spec['pool']['name'] = 'pool-tcp-snat-2'
     backend_pool_spec['pool']['description'] = 'pool-tcp-snat-2-modified'

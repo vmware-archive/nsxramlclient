@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def create_application_rule(session, edge_id='edge-1'):
-    app_rule_spec = session.extract_resource_body_schema('appRules', 'create')
+    app_rule_spec = session.extract_resource_body_example('appRules', 'create')
 
     app_rule_spec['applicationRule']['name'] = 'raml_test'
     app_rule_spec['applicationRule']['script'] = 'acl vmware_page url_beg /vmware redirect ' \
@@ -50,7 +50,7 @@ def application_rule(session, edge_id='edge-1'):
 
 
 def update_application_rule(session, object_id, edge_id='edge-1'):
-    app_rule_spec = session.extract_resource_body_schema('appRule', 'update')
+    app_rule_spec = session.extract_resource_body_example('appRule', 'update')
 
     app_rule_spec['applicationRule']['name'] = 'raml_test'
     app_rule_spec['applicationRule']['script'] = 'acl vmware_page_new url_beg /vmware redirect ' \

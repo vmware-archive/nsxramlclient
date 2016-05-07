@@ -92,7 +92,7 @@ def delete_sec_group(session, secgroupid):
 
 def add_dynamic_match(session, secgroupid, criteria='VM.NAME', key='Web'):
     body_content = session.read('secGroupObject', uri_parameters={'objectId': secgroupid})['body']
-    extracted_schema = session.extract_resource_body_schema('secGroupCreate', 'create')
+    extracted_schema = session.extract_resource_body_example('secGroupCreate', 'create')
     dynamic_member_def = extracted_schema['securitygroup']['dynamicMemberDefinition']
     dynamic_member_def['dynamicSet']['dynamicCriteria']['criteria'] = 'contains'
     dynamic_member_def['dynamicSet']['dynamicCriteria']['isValid'] = 'true'
@@ -103,7 +103,7 @@ def add_dynamic_match(session, secgroupid, criteria='VM.NAME', key='Web'):
 
 
 def empty_sec_group_create(session, name):
-    new_sec_group = session.extract_resource_body_schema('secGroupCreate', 'create')
+    new_sec_group = session.extract_resource_body_example('secGroupCreate', 'create')
     new_sec_group['securitygroup']['name'] = name
     new_sec_group['securitygroup'].pop('dynamicMemberDefinition')
     new_sec_group['securitygroup'].pop('excludeMember')

@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def create_application_profile(session, edge_id='edge-1', method='cookie', c_name='JSESSIONID', c_mode='insert'):
-    app_profile_spec = session.extract_resource_body_schema('applicationProfiles', 'create')
+    app_profile_spec = session.extract_resource_body_example('applicationProfiles', 'create')
 
     app_profile_spec['applicationProfile']['name'] = 'raml_test'
     app_profile_spec['applicationProfile']['insertXForwardedFor'] = 'true'
@@ -53,7 +53,7 @@ def application_profiles(session, edge_id='edge-1'):
 
 
 def update_application_profile(session, object_id, edge_id='edge-1'):
-    app_profile_spec = session.extract_resource_body_schema('applicationProfile', 'update')
+    app_profile_spec = session.extract_resource_body_example('applicationProfile', 'update')
 
     app_profile_spec['applicationProfile']['name'] = 'raml_test'
     app_profile_spec['applicationProfile']['insertXForwardedFor'] = 'true'

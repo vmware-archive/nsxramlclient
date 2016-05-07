@@ -37,7 +37,7 @@ def vxlan_prep(session, cluster_moid, dvs_moid, ipaddresspool, vlan_id=0, vmknic
     :param mtu: MTU for the VTEP, defaults to 1600
     :return: Returns the last tasks jobid
     """
-    vxlan_prep_dvs = session.extract_resource_body_schema('nwfabricConfig', 'create')
+    vxlan_prep_dvs = session.extract_resource_body_example('nwfabricConfig', 'create')
     vxlan_prep_dvs['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = dvs_moid
     vxlan_prep_dvs['nwFabricFeatureConfig']['featureId'] = 'com.vmware.vshield.vsm.vxlan'
     vxlan_prep_dvs['nwFabricFeatureConfig']['resourceConfig'].update({'configSpec':
@@ -50,7 +50,7 @@ def vxlan_prep(session, cluster_moid, dvs_moid, ipaddresspool, vlan_id=0, vmknic
     vxlan_prep_dvs_response = session.create('nwfabricConfig', request_body_dict=vxlan_prep_dvs)
     session.view_response(vxlan_prep_dvs_response)
 
-    vxlan_prep_cluster = session.extract_resource_body_schema('nwfabricConfig', 'create')
+    vxlan_prep_cluster = session.extract_resource_body_example('nwfabricConfig', 'create')
     vxlan_prep_cluster['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = cluster_moid
     vxlan_prep_cluster['nwFabricFeatureConfig']['featureId'] = 'com.vmware.vshield.vsm.vxlan'
     vxlan_prep_cluster['nwFabricFeatureConfig']['resourceConfig'].update({'configSpec':
@@ -67,7 +67,7 @@ def vxlan_prep(session, cluster_moid, dvs_moid, ipaddresspool, vlan_id=0, vmknic
 
 
 def vxlan_unprep_cluster(session, cluster_moid):
-    vxlan_prep_cluster = session.extract_resource_body_schema('nwfabricConfig', 'delete')
+    vxlan_prep_cluster = session.extract_resource_body_example('nwfabricConfig', 'delete')
     vxlan_prep_cluster['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = cluster_moid
     vxlan_prep_cluster['nwFabricFeatureConfig']['featureId'] = 'com.vmware.vshield.vsm.vxlan'
 
@@ -76,7 +76,7 @@ def vxlan_unprep_cluster(session, cluster_moid):
     return vxlan_prep_cluster_response['objectId']
 
 def vxlan_unprep_dvs_context(session, dvs_moid):
-    vxlan_prep_dvs = session.extract_resource_body_schema('nwfabricConfig', 'delete')
+    vxlan_prep_dvs = session.extract_resource_body_example('nwfabricConfig', 'delete')
     vxlan_prep_dvs['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = dvs_moid
     vxlan_prep_dvs['nwFabricFeatureConfig']['featureId'] = 'com.vmware.vshield.vsm.vxlan'
 

@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def configure_nat(session, edgeid='edge-1', oadd='10.112.196.116', tadd='172.16.1.10', oport=3389, tport=3389):
-    nat_spec = session.extract_resource_body_schema('edgeNat', 'update')
+    nat_spec = session.extract_resource_body_example('edgeNat', 'update')
 
     nat_spec['nat']['natRules']['natRule']['ruleTag'] = 65538
     nat_spec['nat']['natRules']['natRule']['action'] = 'dnat'
@@ -45,7 +45,7 @@ def configure_nat(session, edgeid='edge-1', oadd='10.112.196.116', tadd='172.16.
 
 
 def append_nat(session, edgeid='edge-1', oadd='10.112.196.117', tadd='172.16.1.11', oport=3390, tport=3390):
-    nat_spec = session.extract_resource_body_schema('edgeNatRules', 'create')
+    nat_spec = session.extract_resource_body_example('edgeNatRules', 'create')
 
     nat_spec['natRules']['natRule']['action'] = 'dnat'
     nat_spec['natRules']['natRule']['vnic'] = 0
@@ -64,7 +64,7 @@ def append_nat(session, edgeid='edge-1', oadd='10.112.196.117', tadd='172.16.1.1
 
 
 def update_nat(session, rule_id, edgeid='edge-1', oadd='10.112.196.118', tadd='172.16.1.12', oport=3391, tport=3391):
-    nat_spec = session.extract_resource_body_schema('edgeNatRule', 'update')
+    nat_spec = session.extract_resource_body_example('edgeNatRule', 'update')
 
     nat_spec['natRule']['action'] = 'dnat'
     nat_spec['natRule']['vnic'] = 0

@@ -35,7 +35,7 @@ def delete_time_settings(session):
 
 
 def update_time_settings(session, ntp='192.168.110.10', timezone='UTC'):
-    config_spec = session.extract_resource_body_schema('systemTime', 'update')
+    config_spec = session.extract_resource_body_example('systemTime', 'update')
     config_spec['timeSettings']['timezone'] = timezone
     config_spec['timeSettings']['ntpServer']['string'] = ntp
     create_response = session.update('systemTime', request_body_dict=config_spec)
