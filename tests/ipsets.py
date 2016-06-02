@@ -25,7 +25,7 @@ import time
 
 client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
-ipset_dict = client_session.extract_resource_body_schema('ipsetCreate', 'create')
+ipset_dict = client_session.extract_resource_body_example('ipsetCreate', 'create')
 ipset_dict['ipset']['name'] = 'Test'
 ipset_dict['ipset']['value'] = '192.168.1.0/24'
 ipset_dict['ipset']['inheritanceAllowed'] = 'True'

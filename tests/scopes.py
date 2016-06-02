@@ -36,7 +36,7 @@ def get_vdnscope(session, vdn_scope):
 
 def create_vdnscope(session, name, cluster_moid_list, description='created by nsxramlclient',
                     control_plane_mode='UNICAST_MODE'):
-    vdn_create_spec = session.extract_resource_body_schema('vdnScopes', 'create')
+    vdn_create_spec = session.extract_resource_body_example('vdnScopes', 'create')
     vdn_create_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = cluster_moid_list[0]
     vdn_create_spec['vdnScope']['name'] = name
     vdn_create_spec['vdnScope']['description'] = description
@@ -46,7 +46,7 @@ def create_vdnscope(session, name, cluster_moid_list, description='created by ns
 
     if len(cluster_moid_list) > 1:
         for cluster in cluster_moid_list[1:]:
-            vdn_edit_spec = session.extract_resource_body_schema('vdnScope', 'create')
+            vdn_edit_spec = session.extract_resource_body_example('vdnScope', 'create')
             vdn_edit_spec['vdnScope']['objectId'] = vdn_scope
             vdn_edit_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = cluster
             session.create('vdnScope', uri_parameters={'scopeId': vdn_scope},
@@ -58,7 +58,7 @@ def create_vdnscope(session, name, cluster_moid_list, description='created by ns
 
 def shrink_vdn_scope(session, vdn_scope, cluster_moid_list):
     for cluster in cluster_moid_list:
-        vdn_edit_spec = session.extract_resource_body_schema('vdnScope', 'create')
+        vdn_edit_spec = session.extract_resource_body_example('vdnScope', 'create')
         vdn_edit_spec['vdnScope']['objectId'] = vdn_scope
         vdn_edit_spec['vdnScope']['clusters']['cluster']['cluster']['objectId'] = cluster
         session.create('vdnScope', uri_parameters={'scopeId': vdn_scope}, query_parameters_dict={'action': 'shrink'},
@@ -67,7 +67,7 @@ def shrink_vdn_scope(session, vdn_scope, cluster_moid_list):
 
 def update_vdnscope_attributes(session, vdn_scope, new_name='Updated the name', new_desc='And updated description',
                                control_plane_mode='HYBRID_MODE'):
-    vdn_update_spec = session.extract_resource_body_schema('vdnScopeAttribUpdate', 'update')
+    vdn_update_spec = session.extract_resource_body_example('vdnScopeAttribUpdate', 'update')
     vdn_update_spec['vdnScope']['name'] = new_name
     vdn_update_spec['vdnScope']['description'] = new_desc
     vdn_update_spec['vdnScope']['objectId'] = vdn_scope

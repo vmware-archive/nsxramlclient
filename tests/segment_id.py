@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def create_segment_id(session):
-    vdnsegment_spec = session.extract_resource_body_schema('vdnSegmentPools', 'create')
+    vdnsegment_spec = session.extract_resource_body_example('vdnSegmentPools', 'create')
 
     vdnsegment_spec['segmentRange']['name'] = 'TestSegmentId'
     vdnsegment_spec['segmentRange']['begin'] = '6000'

@@ -26,7 +26,7 @@ s = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=False)
 
 
 def ippool_add():
-    new_ip_pool = s.extract_resource_body_schema('ipPools', 'create')
+    new_ip_pool = s.extract_resource_body_example('ipPools', 'create')
 
     new_ip_pool['ipamAddressPool']['ipRanges']['ipRangeDto']['startAddress'] = '172.17.100.65'
     new_ip_pool['ipamAddressPool']['ipRanges']['ipRangeDto']['endAddress'] = '172.17.100.67'
@@ -62,7 +62,7 @@ def update_ippool(objectId, body_dict):
     s.view_response(update_resp)
 
 def allocate_next_ip(objectId):
-    body_dict = s.extract_resource_body_schema('ipPoolAllocate', 'create')
+    body_dict = s.extract_resource_body_example('ipPoolAllocate', 'create')
     body_dict['ipAddressRequest']['allocationMode'] = 'ALLOCATE'
     allocate_response = s.create('ipPoolAllocate', uri_parameters={'poolId': objectId}, request_body_dict=body_dict)
     s.view_response(allocate_response)
@@ -70,7 +70,7 @@ def allocate_next_ip(objectId):
 
 
 def allocate_specific_ip(objectId, ip):
-    body_dict = s.extract_resource_body_schema('ipPoolAllocate', 'create')
+    body_dict = s.extract_resource_body_example('ipPoolAllocate', 'create')
     body_dict['ipAddressRequest']['allocationMode'] = 'RESERVE'
     body_dict['ipAddressRequest']['ipAddress'] = ip
     allocate_response = s.create('ipPoolAllocate', uri_parameters={'poolId': objectId}, request_body_dict=body_dict)

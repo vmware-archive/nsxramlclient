@@ -34,7 +34,7 @@ def test_segment_pools():
     client_session.view_response(get_segment_resp)
 
     # Add a Segment Pool
-    segments_create_body = client_session.extract_resource_body_schema('vdnSegmentPools', 'create')
+    segments_create_body = client_session.extract_resource_body_example('vdnSegmentPools', 'create')
     client_session.view_body_dict(segments_create_body)
 
     segments_create_body['segmentRange']['begin'] = '11002'
@@ -47,7 +47,7 @@ def test_segment_pools():
     time.sleep(5)
 
     # Update the new Segment Pool:
-    update_segment_body = client_session.extract_resource_body_schema('vdnSegmentPool', 'update')
+    update_segment_body = client_session.extract_resource_body_example('vdnSegmentPool', 'update')
     update_segment_body['segmentRange']['name'] = 'PythonTest'
     update_segment_body['segmentRange']['end'] = '11005'
     client_session.update('vdnSegmentPool', uri_parameters={'segmentPoolId': create_response['objectId']},
@@ -69,7 +69,7 @@ def test_mcast_pools():
     ### Test Multicast Pool Operations
 
     # Add a multicast Pool
-    mcastpool_create_body = client_session.extract_resource_body_schema('vdnMulticastPools', 'create')
+    mcastpool_create_body = client_session.extract_resource_body_example('vdnMulticastPools', 'create')
     client_session.view_body_dict(mcastpool_create_body)
 
     mcastpool_create_body['multicastRange']['desc'] = 'Test'
@@ -87,7 +87,7 @@ def test_mcast_pools():
     time.sleep(5)
 
     # Update the newly created mcast pool
-    mcastpool_update_body = client_session.extract_resource_body_schema('vdnMulticastPool', 'update')
+    mcastpool_update_body = client_session.extract_resource_body_example('vdnMulticastPool', 'update')
     mcastpool_update_body['multicastRange']['end'] = '235.3.1.1'
     mcastpool_update_body['multicastRange']['name'] = 'Python'
 

@@ -24,7 +24,7 @@ from nsxramlclient.client import NsxClient
 s = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=False)
 
 def vc_registration():
-    vc_reg = s.extract_resource_body_schema('vCenterConfig', 'update')
+    vc_reg = s.extract_resource_body_example('vCenterConfig', 'update')
 
     vc_reg['vcInfo']['ipAddress'] = '172.17.100.60'
     vc_reg['vcInfo']['userName'] = 'administrator@vsphere.local'
@@ -40,7 +40,7 @@ def vc_registration():
     s.view_response(vc_reg_response)
 
 def sso_registration_set():
-    sso_reg = s.extract_resource_body_schema('ssoConfig', 'create')
+    sso_reg = s.extract_resource_body_example('ssoConfig', 'create')
 
     sso_reg['ssoConfig']['ssoAdminUsername'] = 'administrator@vsphere.local'
     sso_reg['ssoConfig']['ssoAdminUserpassword'] = 'vmware'

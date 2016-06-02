@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def create_edge_syslog(session, edge_id='edge-1'):
-    syslog_spec = session.extract_resource_body_schema('syslog', 'update')
+    syslog_spec = session.extract_resource_body_example('syslog', 'update')
 
     syslog_spec['syslog']['protocol'] = 'tcp'
     syslog_spec['syslog']['serverAddresses']['ipAddress'] = '192.168.110.80'

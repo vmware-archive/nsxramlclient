@@ -26,7 +26,7 @@ __author__ = 'shrirang'
 
 def create_security_tag(session, name, object_type='TestTag', type_name='SecurityTagTest',
                         description='RAMLclient test security tag'):
-    security_tag_spec = session.extract_resource_body_schema('securityTag', 'create')
+    security_tag_spec = session.extract_resource_body_example('securityTag', 'create')
 
     security_tag_spec['securityTag']['name'] = name
     security_tag_spec['securityTag']['objectTypeName'] = object_type

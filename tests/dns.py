@@ -25,7 +25,7 @@ __author__ = 'shrirang'
 
 
 def configure_dns(session, edge_id='edge-1', ipaddr='10.117.0.1', listener='192.168.100.1'):
-    config_spec = session.extract_resource_body_schema('edgeDns', 'update')
+    config_spec = session.extract_resource_body_example('edgeDns', 'update')
     config_spec['dns']['enabled'] = 'true'
     config_spec['dns']['dnsServers']['ipAddress'] = ipaddr
     config_spec['dns']['cacheSize'] = '128'
