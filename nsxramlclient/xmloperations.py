@@ -73,7 +73,10 @@ def parse_dict(xml_root_object, dict_to_parse):
             xml_subitem = et.SubElement(xml_root_object, xml_subitem_name)
             parse_dict(xml_subitem, subitem[1])
         elif type(subitem[1]) is list:
-            for embededdict in subitem[1]:
-                if embededdict:
+            for item in subitem[1]:
+                if type(item) is dict:
                     xml_subitem = et.SubElement(xml_root_object, xml_subitem_name)
-                    parse_dict(xml_subitem, embededdict)
+                    parse_dict(xml_subitem, item)
+                elif type(item) is str:
+                    xml_subitem = et.SubElement(xml_root_object, xml_subitem_name)
+                    xml_subitem.text = str(item)
