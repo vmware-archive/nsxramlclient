@@ -9,6 +9,11 @@ The latest version of the NSX for vSphere 6.x RAML file can be found at http://g
 
 # Version History
 
+### Version 2.0.1
+This version of nsxramlclient added support for repeating keys in the XML body without nested structure bellow.
+Before v2.0.1 nsxramlclient only supports repeating keys in the XML body if these repeating key themself hold multiple keys bellow them (nesting). This patch adds the support for repeating keys that only hold a values bellow them and no nested structure. This was needed to support the API call to create secondary IP Addresses on ESG router interfaces
+
+
 ### Version 2.0
 This version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled.
 In the new NSX-v RAML spec schemas are now real schemas that can be used to check the correctness of your XML document.
