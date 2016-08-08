@@ -5,9 +5,13 @@ This Python based client for NSX for vSphere 6.x gets its API structure informat
 
 The latest version of the NSX for vSphere 6.x RAML file can be found at http://github.com/vmware/nsxraml
 
-#### NOTE: Please read the bellow Version information. The 2.0 Version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled. If you are using the 1.x version of nsxramlclient you will need to use the 6.1.4, 6.1.6 or 6.2.2 versions of the nsx raml spec. In the 2.0 version the method `extract_resource_body_schema` was replaced with `extract_resource_body_example`
+#### NOTE:
+Please read the bellow Version information. The 2.0 Version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled. If you are using the 1.x version of nsxramlclient you will need to use the 6.1.4, 6.1.6 or 6.2.2 versions of the nsx raml spec. In the 2.0 version the method `extract_resource_body_schema` was replaced with `extract_resource_body_example`
 
 # Version History
+
+### Version 2.0.2
+Change in the lxml dependency. We are now mandating lxml 3.6.0 or lower because of installation issues seen on Windows with lxml 3.6.1.
 
 ### Version 2.0.1
 This version of nsxramlclient added support for repeating keys in the XML body without nested structure bellow.

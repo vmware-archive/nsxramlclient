@@ -9,14 +9,26 @@ for use with VMware NSX for vSphere 6.x.
 The latest version of the NSX for vSphere 6.x RAML file can be found at
 http://github.com/vmware/nsxraml
 
-NOTE: Please read the bellow Version information. The 2.0 Version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled. If you are using the 1.x version of nsxramlclient you will need to use the 6.1.4, 6.1.6 or 6.2.2 versions of the nsx raml spec. In the 2.0 version the method ``extract_resource_body_schema`` was replaced with ``extract_resource_body_example``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NOTE: Please read the bellow Version information. The 2.0 Version of
+nsxramlclient is needed to support the new format of the nsxraml spec
+on http://github.com/vmware/nsxraml that introduced a breaking change in
+the way schemas are handled.
+If you are using the 1.x version of nsxramlclient you will need to use the
+6.1.4, 6.1.6 or 6.2.2 versions of the nsx raml spec. In the 2.0 version the
+method ``extract_resource_body_schema`` was replaced with
+``extract_resource_body_example``
+
 
 Version History
 ===============
 
+Version 2.0.2
+=============
+Change in the lxml dependency. We are now mandating lxml 3.6.0 or lower
+because of installation issues seen on Windows with lxml 3.6.1.
+
 Version 2.0.1
-~~~~~~~~~~~~~
+=============
 
 This version of nsxramlclient added support for repeating keys in the
 XML body without nested structure bellow. Before v2.0.1 nsxramlclient
@@ -27,7 +39,7 @@ nested structure. This was needed to support the API call to create
 secondary IP Addresses on ESG router interfaces
 
 Version 2.0
-~~~~~~~~~~~
+===========
 
 This version of nsxramlclient is needed to support the new format of the
 nsxraml spec on http://github.com/vmware/nsxraml that introduced a
@@ -39,7 +51,7 @@ retrieving the XML example dict is by using the new method introduced in
 the 2.0 version named ``extract_resource_body_example``
 
 Version 1.0.4
-~~~~~~~~~~~~~
+=============
 
 This release introduces new helper methods:
 
@@ -58,7 +70,7 @@ is return. When one Object is found, a List with the one Dict is
 returned, when the input is a list, it is returned back unmodified
 
 Version 1.0.2 and 1.0.1
-~~~~~~~~~~~~~~~~~~~~~~~
+=======================
 
 Initial versions
 
@@ -126,7 +138,7 @@ Examples on how to use nsxramlclient
 ====================================
 
 Create a session object
-~~~~~~~~~~~~~~~~~~~~~~~
+=======================
 
 It is required to create a session object with which you will interact
 with the NSX REST API. This session object will then expose the create,
