@@ -22,6 +22,10 @@ method ``extract_resource_body_schema`` was replaced with
 Version History
 ===============
 
+Version 2.0.3
+=============
+Change in the dependencies to include 'oyopenssl' to make nsxramlclient easier to install on Windows
+
 Version 2.0.2
 =============
 Change in the lxml dependency. We are now mandating lxml 3.6.0 or lower

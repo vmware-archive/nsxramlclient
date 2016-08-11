@@ -14,7 +14,7 @@ long_description = read('README.rst')
 
 setup(
     name='nsxramlclient',
-    version='2.0.2',
+    version='2.0.3',
     packages=['nsxramlclient'],
     url='http://github.com/vmware/nsxramlclient',
     license='MIT',
@@ -29,5 +29,6 @@ setup(
     'Topic :: Software Development :: Libraries',
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 2.7'],
-    install_requires=['pyraml-parser>=0.1.3', 'lxml<=3.6.0', 'requests>=2.7.0']
+    install_requires=['pyopenssl', 'pyraml-parser>=0.1.3', 'lxml<=3.6.0', 'requests>=2.7.0']
 )
+

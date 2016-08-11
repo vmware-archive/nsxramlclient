@@ -10,6 +10,9 @@ Please read the bellow Version information. The 2.0 Version of nsxramlclient is 
 
 # Version History
 
+### Version 2.0.3
+Change in the dependencies to include 'oyopenssl' to make nsxramlclient easier to install on Windows
+
 ### Version 2.0.2
 Change in the lxml dependency. We are now mandating lxml 3.6.0 or lower because of installation issues seen on Windows with lxml 3.6.1.
 
