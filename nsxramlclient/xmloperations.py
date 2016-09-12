@@ -22,6 +22,9 @@ __author__ = 'yfauser'
 import xml.dom.minidom as md
 from collections import defaultdict
 from lxml import etree as et
+import sys
+if sys.version_info.major == 2:
+    from builtins import dict
 
 
 def pretty_xml(xml_string):
@@ -36,11 +39,11 @@ def xml_to_dict(etree_object):
     if children:
         dd = defaultdict(list)
         for dc in map(xml_to_dict, children):
-            for k, v in dc.iteritems():
+            for k, v in dc.items():
                 dd[k].append(v)
-        return_dict = {etree_object.tag: {k: v[0] if len(v) == 1 else v for k, v in dd.iteritems()}}
+        return_dict = {etree_object.tag: {k: v[0] if len(v) == 1 else v for k, v in dd.items()}}
     if etree_object.attrib:
-        return_dict[etree_object.tag].update(('@' + k, v) for k, v in etree_object.attrib.iteritems())
+        return_dict[etree_object.tag].update(('@' + k, v) for k, v in etree_object.attrib.items())
     if etree_object.text:
         text = etree_object.text.strip()
         if children or etree_object.attrib:

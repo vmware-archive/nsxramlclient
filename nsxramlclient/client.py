@@ -23,10 +23,12 @@ import pprint
 
 import pyraml.parser
 from lxml import etree as et
+import sys
+if sys.version_info.major == 2:
+    from builtins import dict
 
-import http_session
-import xmloperations
-
+from . import http_session
+from . import xmloperations
 
 class NsxClient(object):
     def __init__(self, raml_file, nsxmanager, nsx_username, nsx_password, debug=None, verify=None,
@@ -163,18 +165,18 @@ class NsxClient(object):
 
     def view_resource_body_schema(self, searched_resource, method):
         xml_schema_result = self._nsxraml.get_xml_schema_by_displayname(searched_resource, method)
-        print et.tostring(xml_schema_result, pretty_print=True)
+        print(et.tostring(xml_schema_result, pretty_print=True))
 
     def view_resource_body_example(self, searched_resource, method):
         xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method)
-        print et.tostring(xml_schema_result, pretty_print=True)
+        print(et.tostring(xml_schema_result, pretty_print=True))
 
     def extract_resource_body_schema(self, searched_resource, method):
         # NOTE: THis method is deprecated and will be removed in future version
         xml_schema_result = self._nsxraml.get_xml_schema_by_displayname(searched_resource, method)
-        print '\033[91m' + "DEPRECATION WARNING: This method is deprecated in nsxramlclient v2.x and " \
+        print('\033[91m' + "DEPRECATION WARNING: This method is deprecated in nsxramlclient v2.x and " \
                            "will be removed in future.\nPlease start using the method extract_resource_body_example " \
-                           "instead.\nThis method does not support the NSXv 6.2.4 and later RAML specs" + '\033[0m'
+                           "instead.\nThis method does not support the NSXv 6.2.4 and later RAML specs" + '\033[0m')
         return xmloperations.xml_to_dict(xml_schema_result)
 
     def extract_resource_body_example(self, searched_resource, method):
@@ -184,15 +186,15 @@ class NsxClient(object):
     @staticmethod
     def view_response(ordered_dict):
         pretty_printer = pprint.PrettyPrinter()
-        print 'HTTP status code:\n{}\n'.format(ordered_dict['status'])
+        print('HTTP status code:\n{}\n'.format(ordered_dict['status']))
         if ordered_dict['location']:
-            print 'HTTP location header:\n{}\n'.format(ordered_dict['location'])
+            print('HTTP location header:\n{}\n'.format(ordered_dict['location']))
         if ordered_dict['objectId']:
-            print 'NSX Object Id:\n{}\n'.format(ordered_dict['objectId'])
+            print('NSX Object Id:\n{}\n'.format(ordered_dict['objectId']))
         if ordered_dict['Etag']:
-            print 'Etag Header:\n{}\n'.format(ordered_dict['Etag'])
+            print('Etag Header:\n{}\n'.format(ordered_dict['Etag']))
         if ordered_dict['body']:
-            print 'HTTP Body Content:'
+            print('HTTP Body Content:')
             pretty_printer.pprint(ordered_dict['body'])
 
     @staticmethod
@@ -215,14 +217,14 @@ class NsxClient(object):
 
             output_text.append('\n')
 
-        print ''.join(output_text)
+        print(''.join(output_text))
 
     def read_all_pages(self, searched_resource, uri_parameters=None, request_body_dict=None,
                        query_parameters_dict=None, additional_headers=None):
         supported_objects = ['virtualWires', 'pagedEdgeList']
         first_page = self._request(searched_resource, 'get', uri_parameters, request_body_dict, query_parameters_dict,
                                    additional_headers)['body']
-        first_key = first_page.keys()[0]
+        first_key = list(first_page.keys())[0]
         assert first_key in supported_objects, 'unsupported object {}, currently only {} ' \
                                                'are supported'.format(first_key, supported_objects)
 
@@ -325,7 +327,7 @@ class NsxRaml(object):
                 raise Exception('one of the passed URI parameter could not be found in RAMl File')
 
             for uri_parameter in resource_uri_params:
-                assert uri_parameter in uri_parameters.keys(), \
+                assert uri_parameter in list(uri_parameters.keys()), \
                     'one required URI parameter is missing in the passed URI parameters, ' \
                     'required parameters are {}'.format(resource_uri_params)
                 resource_url = re.sub('\{' + uri_parameter + '\}', uri_parameters[uri_parameter], resource_url)
@@ -405,7 +407,7 @@ class NsxRaml(object):
         if isinstance(matched_resource_body['application/xml'].schema, base_et_element):
             return matched_resource_body['application/xml'].schema
         elif isinstance(matched_resource_body['application/xml'].schema, str):
-            assert matched_resource_body['application/xml'].schema in self._nsxraml.schemas.keys(), \
+            assert matched_resource_body['application/xml'].schema in list(self._nsxraml.schemas.keys()), \
                 'the external schema {} could not be found in the schema list of the RAML File'.format(
                     matched_resource_body['application/xml'].schema)
             assert isinstance(self._nsxraml.schemas[matched_resource_body['application/xml'].schema],
@@ -444,13 +446,13 @@ class NsxRaml(object):
             method_items = [method_item for method_item in resource_tuple[1].methods.items()]
 
             try:
-                query_parameters = [rmethod[1].queryParameters.keys() for rmethod in method_items if
+                query_parameters = [list(rmethod[1].queryParameters.keys()) for rmethod in method_items if
                                     rmethod[1].queryParameters][0]
             except IndexError:
                 query_parameters = None
 
             try:
-                resource_add_headers = [rmethod[1].headers.keys() for rmethod in method_items if
+                resource_add_headers = [list(rmethod[1].headers.keys()) for rmethod in method_items if
                                         rmethod[1].headers][0]
             except IndexError:
                 resource_add_headers = None
