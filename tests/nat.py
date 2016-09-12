@@ -99,7 +99,7 @@ def main():
     append_nat(session)
     query_nat(session)
 
-    rule_id = raw_input('Enter RuleID as seen in above output: ')
+    rule_id = input('Enter RuleID as seen in above output: ')
     update_nat(session, rule_id)
     delete_nat(session)
 

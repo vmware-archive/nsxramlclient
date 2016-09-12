@@ -30,7 +30,7 @@ client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password,
 
 # find the objectId of the Scope with the name of the Transport Zone
 vdn_scopes = client_session.read('vdnScopes', 'read')['body']
-vdn_scope_dict_list = [scope_dict for scope_dict in vdn_scopes['vdnScopes'].items()]
+vdn_scope_dict_list = [scope_dict for scope_dict in list(vdn_scopes['vdnScopes'].items())]
 vdn_scope = [scope[1]['objectId'] for scope in vdn_scope_dict_list if scope[1]['name'] == TRANSPORT_ZONE][0]
 
 # get a template dict for the lswitch create
