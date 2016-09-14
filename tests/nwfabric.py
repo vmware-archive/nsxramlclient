@@ -23,5 +23,5 @@ from nsxramlclient.client import NsxClient
 
 client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
-print client_session.read('nwfabricFeatures')
-print client_session.read('nwfabricStatus', query_parameters_dict={'resource': 'domain-c1632'})
+print(client_session.read('nwfabricFeatures'))
+print(client_session.read('nwfabricStatus', query_parameters_dict={'resource': 'domain-c1632'}))

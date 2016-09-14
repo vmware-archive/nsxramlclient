@@ -28,7 +28,12 @@ setup(
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Libraries',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 2.7'],
-    install_requires=['pyopenssl', 'pyraml-parser>=0.1.3', 'lxml<=3.6.0', 'requests>=2.7.0']
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.5'],
+    install_requires=['pyopenssl', 'pyraml-parser>=0.1.3', 'lxml<=3.6.0', 'requests>=2.7.0'],
+    extras_require={
+        ':python_version == "2.7"': ['future'],
+    },
 )
 
