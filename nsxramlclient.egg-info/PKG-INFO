@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: nsxramlclient
-Version: 2.0.3
+Version: 2.0.4
 Summary: A "pseudo dynamic" client for the VMware NSX for vSphere API that uses a RAML file describing the API as an Input to generate the API calls
 Home-page: http://github.com/vmware/nsxramlclient
 Author: yfauser
@@ -29,6 +29,10 @@ Description: nsxramlclient
         
         Version History
         ===============
+        
+        Version 2.0.3
+        =============
+        Change in the dependencies to include 'oyopenssl' to make nsxramlclient easier to install on Windows
         
         Version 2.0.2
         =============

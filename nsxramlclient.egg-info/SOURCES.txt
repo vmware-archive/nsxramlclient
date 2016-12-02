@@ -2,6 +2,7 @@ README.rst
 setup.py
 nsxramlclient/__init__.py
 nsxramlclient/client.py
+nsxramlclient/exceptions.py
 nsxramlclient/http_session.py
 nsxramlclient/xmloperations.py
 nsxramlclient.egg-info/PKG-INFO
