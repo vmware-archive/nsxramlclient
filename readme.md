@@ -10,6 +10,9 @@ Please read the bellow Version information. The 2.0 Version of nsxramlclient is 
 
 # Version History
 
+### Version 2.0.4
+Added fail_mode='' option in NsxClient to raise an exception instead of sys.exit when setting fail_mode='raise', or continue without an exception if set to fail_mode='continue'. Default is still fail_mode='exit' to preserve backwards compatibility. Read the changed *'Create a session object'* section for mode details
+
 ### Version 2.0.3
 Change in the dependencies to include 'oyopenssl' to make nsxramlclient easier to install on Windows
 
@@ -92,7 +95,7 @@ nsx_username = 'admin'
 nsx_password = 'vmware'
 
 client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, 
-                           nsx_password, debug=False)
+                           nsx_password, debug=False, fail_mode='raise')
 ```
 The NsxClient class has the following initialization parameters:
 ```python
@@ -121,6 +124,13 @@ Default: False
 :param suppress_warnings: Optional: 
 If set to True, the client will print out a warning if NSX Manager uses a self signed certificate. 
 Default: True
+
+:param fail_mode: Optional: 
+If not set, the client will exit using sys.exit when receiving any error status code from NSX like 400.
+If fail_mode is set to 'raise', the exception nsxramlclient.exceptions.NsxError will be raised with status 
+being the HTTP status code received and msg being the error message returned by NSX in the body. If set to 
+'continue', no error will be raised, and the status and body is returned like in successful cases. 
+Default: 'exit'
 
 :return: Returns a NsxClient Session Object
 """
