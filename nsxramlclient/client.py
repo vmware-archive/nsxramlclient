@@ -30,7 +30,7 @@ import xmloperations
 
 class NsxClient(object):
     def __init__(self, raml_file, nsxmanager, nsx_username, nsx_password, debug=None, verify=None,
-                 suppress_warnings=None):
+                 suppress_warnings=None, fail_mode=None):
         """
         :param raml_file: This mandatory parameter is a RAML File used as the basis of all URL compossitions and
                           to extract body schemas and convert them into python dictionaries
@@ -43,6 +43,11 @@ class NsxClient(object):
                Default: False
         :param suppress_warnings: Optional: If set to True, the client will print out a warning if NSX Manager uses
                a self signed certificate. Default: True
+        :param fail_mode: Optional: If not set, the client will exit using sys.exit when receiving any error status code
+               from NSX like 400, etc. If fail_mode is set to 'raise', the exception nsxramlclient.exceptions.NsxError
+               will be raised with status being the HTTP status code received and msg being the error message returned
+               by NSX in the body. If set to 'continue', no error will be raised, and the status and body is returned
+               like in successful cases. The default is 'exit'
         :return: Returns a NsxClient Session Object
         """
         self._nsx_raml_file = raml_file
@@ -55,8 +60,13 @@ class NsxClient(object):
             self._suppress_warnings = suppress_warnings
         else:
             self._suppress_warnings = True
+        if fail_mode:
+            self.fail_mode = fail_mode
+        else:
+            self.fail_mode = 'exit'
+
         self._httpsession = http_session.Session(self._nsx_username, self._nsx_password, self._debug, self._verify,
-                                                 self._suppress_warnings)
+                                                 self._suppress_warnings, self.fail_mode)
 
     def read(self, searched_resource, uri_parameters=None, request_body_dict=None, query_parameters_dict=None,
              additional_headers=None):

@@ -23,6 +23,7 @@ import sys
 import time
 from functools import wraps
 from collections import OrderedDict
+from exceptions import NsxError
 
 import requests
 from lxml import etree as et
@@ -52,7 +53,8 @@ def retry(catchexception, tries=4, wait=3, backofftime=2):
 
 
 class Session(object):
-    def __init__(self, username='admin', password='default', debug=False, verify=False, suppress_warnings=False):
+    def __init__(self, username='admin', password='default', debug=False, verify=False, suppress_warnings=False,
+                 fail_mode='exit'):
         self._username = username
         self._password = password
         self._debug = debug
@@ -61,6 +63,7 @@ class Session(object):
         self._session = requests.Session()
         self._session.verify = self._verify
         self._session.auth = (self._username, self._password)
+        self.fail_mode = fail_mode
 
         # if debug then enable underlying httplib debugging
         if self._debug:
@@ -80,7 +83,7 @@ class Session(object):
         :param data: Any data as PyDict (will be converted to XML string)
         :param headers: Any data as PyDict
         :return: If response is XML then an xml.etree.ElementTree else the raw content
-        :raise: Any unsuccessful HTTP response code
+        :raise: Any unsuccessful HTTP response code if fail_mode=raise
         """
 
         response_content = None
@@ -95,20 +98,7 @@ class Session(object):
 
         response = self._session.request(method, url, headers=headers, params=params, data=data)
 
-        if response.status_code not in [200, 201, 204]:
-            if 'content-type' in response.headers:
-                if response.headers['content-type'].find('text/html') != -1:
-                    response_content = self._html2text(response.content)
-                elif response.headers['content-type'].find('application/xml') != -1:
-                    response_content = xmloperations.pretty_xml(response.content)
-                else:
-                    response_content = response.content
-            else:
-                response_content = response.content
-
-            sys.exit('receive bad status code {}\n{}'.format(response.status_code, response_content))
-
-        elif 'content-type' in response.headers:
+        if 'content-type' in response.headers:
             if response.headers['content-type'].find('application/xml') != -1:
                 response_content = xmloperations.xml_to_dict(et.fromstring(response.content))
             elif response.headers['content-type'].find('application/json') != -1:
@@ -126,7 +116,16 @@ class Session(object):
         if 'Etag' in response.headers:
             response_odict['Etag'] = response.headers['Etag']
 
+        if response.status_code not in [200, 201, 204]:
+            if self.fail_mode == 'exit':
+                sys.exit('receive bad status code {}\n{}'.format(response.status_code, response_content))
+            elif self.fail_mode == 'raise':
+                raise NsxError(response.status_code, response_content)
+            elif self.fail_mode == 'continue':
+                pass
+
         return response_odict
+
 # Thanks to Joseph Roten for the great sample code used in _html2text
 # http://stackoverflow.com/questions/14694482/converting-html-to-text-with-python
     def _html2text(self, strText):
