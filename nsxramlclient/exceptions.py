@@ -41,3 +41,6 @@ class NsxError(Error):
     def __init__(self, status, msg):
         self.status = status
         self.msg = msg
+
+    def __str__(self):
+        return '\nstatus code: {}\nerror message: {}'.format(self.status, self.msg)
