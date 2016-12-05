@@ -9,30 +9,44 @@ for use with VMware NSX for vSphere 6.x.
 The latest version of the NSX for vSphere 6.x RAML file can be found at
 http://github.com/vmware/nsxraml
 
-NOTE: Please read the bellow Version information. The 2.0 Version of
-nsxramlclient is needed to support the new format of the nsxraml spec
-on http://github.com/vmware/nsxraml that introduced a breaking change in
-the way schemas are handled.
-If you are using the 1.x version of nsxramlclient you will need to use the
-6.1.4, 6.1.6 or 6.2.2 versions of the nsx raml spec. In the 2.0 version the
-method ``extract_resource_body_schema`` was replaced with
-``extract_resource_body_example``
+NOTE:
+^^^^^
 
+Please read the bellow Version information. The 2.0 Version of
+nsxramlclient is needed to support the new format of the nsxraml spec on
+http://github.com/vmware/nsxraml that introduced a breaking change in
+the way schemas are handled. If you are using the 1.x version of
+nsxramlclient you will need to use the 6.1.4, 6.1.6 or 6.2.2 versions of
+the nsx raml spec. In the 2.0 version the method
+``extract_resource_body_schema`` was replaced with
+``extract_resource_body_example``
 
 Version History
 ===============
 
+Version 2.0.4
+^^^^^^^^^^^^^
+
+Added fail\_mode='' option in NsxClient to raise an exception instead of
+sys.exit when setting fail\_mode='raise', or continue without an
+exception if set to fail\_mode='continue'. Default is still
+fail\_mode='exit' to preserve backwards compatibility. Read the changed
+*'Create a session object'* section for mode details
+
 Version 2.0.3
-=============
-Change in the dependencies to include 'oyopenssl' to make nsxramlclient easier to install on Windows
+^^^^^^^^^^^^^
+
+Change in the dependencies to include 'oyopenssl' to make nsxramlclient
+easier to install on Windows
 
 Version 2.0.2
-=============
+^^^^^^^^^^^^^
+
 Change in the lxml dependency. We are now mandating lxml 3.6.0 or lower
 because of installation issues seen on Windows with lxml 3.6.1.
 
 Version 2.0.1
-=============
+^^^^^^^^^^^^^
 
 This version of nsxramlclient added support for repeating keys in the
 XML body without nested structure bellow. Before v2.0.1 nsxramlclient
@@ -43,7 +57,7 @@ nested structure. This was needed to support the API call to create
 secondary IP Addresses on ESG router interfaces
 
 Version 2.0
-===========
+^^^^^^^^^^^
 
 This version of nsxramlclient is needed to support the new format of the
 nsxraml spec on http://github.com/vmware/nsxraml that introduced a
@@ -55,7 +69,7 @@ retrieving the XML example dict is by using the new method introduced in
 the 2.0 version named ``extract_resource_body_example``
 
 Version 1.0.4
-=============
+^^^^^^^^^^^^^
 
 This release introduces new helper methods:
 
@@ -74,7 +88,7 @@ is return. When one Object is found, a List with the one Dict is
 returned, when the input is a list, it is returned back unmodified
 
 Version 1.0.2 and 1.0.1
-=======================
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Initial versions
 
@@ -142,7 +156,7 @@ Examples on how to use nsxramlclient
 ====================================
 
 Create a session object
-=======================
+^^^^^^^^^^^^^^^^^^^^^^^
 
 It is required to create a session object with which you will interact
 with the NSX REST API. This session object will then expose the create,
@@ -159,7 +173,7 @@ some helper methods that will be useful.
     nsx_password = 'vmware'
 
     client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, 
-                               nsx_password, debug=False)
+                               nsx_password, debug=False, fail_mode='raise')
 
 The NsxClient class has the following initialization parameters:
 
@@ -190,6 +204,13 @@ The NsxClient class has the following initialization parameters:
     :param suppress_warnings: Optional: 
     If set to True, the client will print out a warning if NSX Manager uses a self signed certificate. 
     Default: True
+
+    :param fail_mode: Optional: 
+    If not set, the client will exit using sys.exit when receiving any error status code from NSX like 400.
+    If fail_mode is set to 'raise', the exception nsxramlclient.exceptions.NsxError will be raised with status 
+    being the HTTP status code received and msg being the error message returned by NSX in the body. If set to 
+    'continue', no error will be raised, and the status and body is returned like in successful cases. 
+    Default: 'exit'
 
     :return: Returns a NsxClient Session Object
     """
@@ -240,7 +261,7 @@ methods:
    supported.
 
 Use of the create, read, update and delete methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
@@ -382,7 +403,7 @@ supplying the body dictionary in the call:
     'virtualwire-1305'
 
 Note on Etag header and additional headers (e.g. If-match)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some resources in NSX Manager will additionally need the ``If-match``
 header. To compose the ``If-match`` header, retrieve the content of the
@@ -413,7 +434,7 @@ Note that the ``If-match`` header is supplied by the
 ``additional_headers`` dictionary.
 
 Note on the use of XML Tags in body schemas
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some resources in NSX expect values to be set in XML Tags. This example
 shows a dfw resource:
@@ -449,7 +470,7 @@ converted to a XML Tag of the top level object.
     l3section_bdict['section']['rule'][0]['@logged'] = 'true'
 
 Note on repeating key/value pairs and resulting python lists containing dicts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In some cases NSX uses lists of parameters with repeating keys. For
 example:
@@ -562,7 +583,7 @@ rule objects that themselves are python dictionaries. The same holds
 true for the ``destinations``\ and ``sources`` keys.
 
 License
-~~~~~~~
+^^^^^^^
 
 Copyright © 2015 VMware, Inc. All Rights Reserved.
 
@@ -586,7 +607,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 How to contribute
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 Any contributions are welcome, bug reports, additional tests,
 enhancements, etc. Also we welcome your feedback if you find that
