@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: nsxramlclient
-Version: 2.0.4
+Version: 2.0.5
 Summary: A "pseudo dynamic" client for the VMware NSX for vSphere API that uses a RAML file describing the API as an Input to generate the API calls
 Home-page: http://github.com/vmware/nsxramlclient
 Author: yfauser
@@ -32,7 +32,7 @@ Description: nsxramlclient
         Version History
         ===============
         
-        Version 2.0.4
+        Version 2.0.5
         ^^^^^^^^^^^^^
         
         Added fail\_mode='' option in NsxClient to raise an exception instead of

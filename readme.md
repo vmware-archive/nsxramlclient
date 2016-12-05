@@ -10,7 +10,7 @@ Please read the bellow Version information. The 2.0 Version of nsxramlclient is 
 
 # Version History
 
-### Version 2.0.4
+### Version 2.0.5
 Added fail_mode='' option in NsxClient to raise an exception instead of sys.exit when setting fail_mode='raise', or continue without an exception if set to fail_mode='continue'. Default is still fail_mode='exit' to preserve backwards compatibility. Read the changed *'Create a session object'* section for mode details
 
 ### Version 2.0.3

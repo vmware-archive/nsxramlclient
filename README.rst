@@ -24,7 +24,7 @@ the nsx raml spec. In the 2.0 version the method
 Version History
 ===============
 
-Version 2.0.4
+Version 2.0.5
 ^^^^^^^^^^^^^
 
 Added fail\_mode='' option in NsxClient to raise an exception instead of
