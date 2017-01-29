@@ -437,7 +437,8 @@ class NsxRaml(object):
         matched_resource_body = matched_resource[1].methods[method_options[method]].body
         example = matched_resource_body['application/xml'].example
         try:
-            example_et = et.fromstring(example)
+            parser = et.XMLParser(remove_comments=True)
+            example_et = et.fromstring(example, parser=parser)
         except et.XMLSyntaxError as e:
             raise Exception('The parsing of the body example XML failed, please check the format in the RAML file,'
                             'the execption is:\n{}'.format(e))
