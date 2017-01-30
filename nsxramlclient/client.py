@@ -175,8 +175,10 @@ class NsxClient(object):
         xml_schema_result = self._nsxraml.get_xml_schema_by_displayname(searched_resource, method)
         print et.tostring(xml_schema_result, pretty_print=True)
 
-    def view_resource_body_example(self, searched_resource, method):
-        xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method)
+    def view_resource_body_example(self, searched_resource, method, remove_content=None, remove_comments=None):
+        xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method,
+                                                                         remove_comments=remove_comments,
+                                                                         remove_content=remove_content)
         print et.tostring(xml_schema_result, pretty_print=True)
 
     def extract_resource_body_schema(self, searched_resource, method):
@@ -187,8 +189,10 @@ class NsxClient(object):
                            "instead.\nThis method does not support the NSXv 6.2.4 and later RAML specs" + '\033[0m'
         return xmloperations.xml_to_dict(xml_schema_result)
 
-    def extract_resource_body_example(self, searched_resource, method):
-        xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method)
+    def extract_resource_body_example(self, searched_resource, method, remove_content=None, remove_comments=None):
+        xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method,
+                                                                         remove_comments=remove_comments,
+                                                                         remove_content=remove_content)
         return xmloperations.xml_to_dict(xml_schema_result)
 
     @staticmethod
@@ -424,7 +428,11 @@ class NsxRaml(object):
 
             return self._nsxraml.schemas[matched_resource_body['application/xml'].schema]
 
-    def get_xml_example_by_displayname(self, display_name, method):
+    def get_xml_example_by_displayname(self, display_name, method, remove_content=None, remove_comments=None):
+        if not remove_content:
+            remove_content = True
+        if not remove_comments:
+            remove_comments = True
         method_options = {'read': 'get', 'create': 'post', 'delete': 'delete', 'update': 'put'}
         matched_resource = self.find_resource_recursively(display_name)
 
@@ -437,11 +445,16 @@ class NsxRaml(object):
         matched_resource_body = matched_resource[1].methods[method_options[method]].body
         example = matched_resource_body['application/xml'].example
         try:
-            parser = et.XMLParser(remove_comments=True)
+            parser = et.XMLParser(remove_comments=remove_comments)
             example_et = et.fromstring(example, parser=parser)
         except et.XMLSyntaxError as e:
             raise Exception('The parsing of the body example XML failed, please check the format in the RAML file,'
                             'the execption is:\n{}'.format(e))
+
+        if remove_content:
+            for parent, child in self._iterparent(example_et):
+                child.text = None
+                child.tail = None
 
         return example_et
 
@@ -477,6 +490,12 @@ class NsxRaml(object):
             resource_uri_parameters = None
 
         return supported_operations, resource_uri_parameters, query_parameters, resource_add_headers
+
+    @staticmethod
+    def _iterparent(tree):
+        for parent in tree.getiterator():
+            for child in parent:
+                yield parent, child
 
     def list_all_resources(self, raml_resource_root=None, display_names_dict=None):
         if display_names_dict is None:
