@@ -8,7 +8,14 @@ The latest version of the NSX for vSphere 6.x RAML file can be found at http://g
 #### NOTE:
 Please read the bellow Version information. The 2.0 Version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled. If you are using the 1.x version of nsxramlclient you will need to use the 6.1.4, 6.1.6 or 6.2.2 versions of the nsx raml spec. In the 2.0 version the method `extract_resource_body_schema` was replaced with `extract_resource_body_example`
 
+Also, in the NSXv 6.3 version of the nsx raml spec XML Comments and pre-filled content was introduced in the RAML spec to improve readability of the created HTML and PDF artifacts. This change may break existing code, so version 2.0.6 of the nsxramlclient now removes any XML comments and pre-filled content.
+
 # Version History
+
+### Version 2.0.6
+This version of the nsxramlclient will now delete any XML comments found in the body content examples in the nsxraml spec.
+Previously nsxramlclient ran into a traceback if XML comments were used. Also, in this version nsxramlclient by default will remove all pre-filled content in the body content examples. This is needed because of a change in the nsxraml spec where the focus is now more shifting towards documentation, and pre-filled content helps in terms of readability in the examples.
+This behaviour can be controlled by using the remove_content= parameter in the extract_resource_body_example method.
 
 ### Version 2.0.5
 Added fail_mode='' option in NsxClient to raise an exception instead of sys.exit when setting fail_mode='raise', or continue without an exception if set to fail_mode='continue'. Default is still fail_mode='exit' to preserve backwards compatibility. Read the changed *'Create a session object'* section for mode details
