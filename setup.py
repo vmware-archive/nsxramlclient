@@ -14,7 +14,7 @@ long_description = read('README.rst')
 
 setup(
     name='nsxramlclient',
-    version='2.0.5',
+    version='2.0.6',
     packages=['nsxramlclient'],
     url='http://github.com/vmware/nsxramlclient',
     license='MIT',

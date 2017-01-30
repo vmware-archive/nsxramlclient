@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: nsxramlclient
-Version: 2.0.5
+Version: 2.0.6
 Summary: A "pseudo dynamic" client for the VMware NSX for vSphere API that uses a RAML file describing the API as an Input to generate the API calls
 Home-page: http://github.com/vmware/nsxramlclient
 Author: yfauser
@@ -29,8 +29,20 @@ Description: nsxramlclient
         ``extract_resource_body_schema`` was replaced with
         ``extract_resource_body_example``
         
+        Also, in the NSXv 6.3 version of the nsx raml spec XML Comments and pre-filled
+        content was introduced in the RAML spec to improve readability of the created
+        HTML and PDF artifacts. This change may break existing code,
+        so version 2.0.6 of the nsxramlclient now removes any XML comments and
+        pre-filled content.
+        
         Version History
         ===============
+        
+        Version 2.0.6
+        ^^^^^^^^^^^^^
+        This version of the nsxramlclient will now delete any XML comments found in the body content examples in the nsxraml spec.
+        Previously nsxramlclient ran into a traceback if XML comments were used. Also, in this version nsxramlclient by default will remove all pre-filled content in the body content examples. This is needed because of a change in the nsxraml spec where the focus is now more shifting towards documentation, and pre-filled content helps in terms of readability in the examples.
+        This behaviour can be controlled by using the remove_content= parameter in the extract_resource_body_example method.
         
         Version 2.0.5
         ^^^^^^^^^^^^^
