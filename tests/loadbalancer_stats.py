@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # coding=utf-8
 #
 # Copyright © 2015 VMware, Inc. All Rights Reserved.
@@ -19,49 +20,35 @@
 from tests.config import *
 from nsxramlclient.client import NsxClient
 
-__author__ = 'yfauser'
+
+__author__ = 'shrirang'
 
 
-def create_nvc(session, domain='domain-c7'):
-    nwf_spec = session.extract_resource_body_schema('nwfabricConfig', 'update')
-
-    nwf_spec['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = domain
-
-    response = session.update('nwfabricConfig', request_body_dict=nwf_spec)
-
+def get_loadbalancer_stats(session, edge_id='edge-1'):
+    response = session.read('lbStatistics', uri_parameters={'edgeId': edge_id})
     session.view_response(response)
 
 
-def get_nfw_features(session):
-    response = session.read('nwfabricFeatures')
+def update_loadbalancer_acc_mode(session, edge_id='edge-1'):
+    response = session.create('lbAcceleration', uri_parameters={'edgeId': edge_id},
+                              query_parameters_dict={'enable': 'true'})
     session.view_response(response)
 
 
-def get_nfw_status(session, resource='domain-c7'):
-    response = session.read('nwfabricStatus', query_parameters_dict={'resource': resource})
-    session.view_response(response)
-
-
-def delete_nfw(session, domain='domain-c7'):
-    nwf_spec = session.extract_resource_body_schema('nwfabricConfig', 'delete')
-
-    nwf_spec['nwFabricFeatureConfig']['resourceConfig']['resourceId'] = domain
-
-    response = session.delete('nwfabricConfig', request_body_dict=nwf_spec)
-
+def update_loadbalancer_mem_cond(session, edge_id='edge-3'):
+    response = session.create('lbAcceleration', uri_parameters={'edgeId': edge_id},
+                              query_parameters_dict={'enable': 'true'})
     session.view_response(response)
 
 
 def main():
     session = NsxClient(nsxraml_file, nsxmanager, nsx_username, nsx_password, debug=True)
 
-    create_nvc(session)
+    get_loadbalancer_stats(session)
 
-    get_nfw_features(session)
+    update_loadbalancer_acc_mode(session)
 
-    get_nfw_status(session)
-
-    delete_nfw(session)
+    update_loadbalancer_mem_cond(session)
 
 
 if __name__ == "__main__":
