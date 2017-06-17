@@ -16,6 +16,8 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+from __future__ import print_function
+
 from tests.config import *
 from nsxramlclient.client import NsxClient
 from nsxramlclient.exceptions import NsxError
@@ -44,8 +46,8 @@ try:
     new_ls_props = client_session.read('logicalSwitch', uri_parameters={'virtualWireID': lswitch_id2})
     client_session.view_response(new_ls_props)
 except NsxError as e:
-    print "### caught exception !!!!"
-    print e.status, e.msg
+    print("### caught exception !!!!")
+    print(e.status, e.msg)
 
 
 # Try to read properties using a invalid virtual wire Id
@@ -53,5 +55,5 @@ try:
     new_ls_props = client_session.read('logicalSwitch', uri_parameters={'virtualWireID': lswitch_id3})
     client_session.view_response(new_ls_props)
 except NsxError as e:
-    print "### caught exception !!!!"
-    print e.status, e.msg
+    print("### caught exception !!!!")
+    print(e.status, e.msg)

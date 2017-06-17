@@ -17,6 +17,8 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+from __future__ import print_function
+
 __author__ = 'yfauser'
 
 from tests.config import *
@@ -124,7 +126,7 @@ def main():
     get_sec_group_valid_types(s)
 
     new_sec_group = empty_sec_group_create(s, 'newSecGroup')
-    print new_sec_group
+    print(new_sec_group)
 
     sec_group_add_member(s, new_sec_group, '503bfba4-007b-0c27-aac7-26c71c1cbcff.000')
     get_all_sec_groups(s)
