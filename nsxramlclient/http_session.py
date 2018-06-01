@@ -116,7 +116,7 @@ class Session(object):
         if 'Etag' in response.headers:
             response_odict['Etag'] = response.headers['Etag']
 
-        if response.status_code not in [200, 201, 204]:
+        if response.status_code not in [200, 201, 202, 204]:
             if self.fail_mode == 'exit':
                 sys.exit('receive bad status code {}\n{}'.format(response.status_code, response_content))
             elif self.fail_mode == 'raise':
@@ -168,8 +168,3 @@ class Session(object):
             strReturn = strReturn.replace(chr(13)+chr(13), chr(13))
         strReturn = strReturn.replace(chr(13), '\n')
         return strReturn
-
-
-
-
-

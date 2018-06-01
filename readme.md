@@ -1,6 +1,6 @@
 #nsxramlclient
 
-This Python based client for NSX for vSphere 6.x gets its API structure information 
+This Python based client for NSX for vSphere 6.x gets its API structure information
 (e.g. URLs, parameters, schema, etc.) from a RAML file which describes the NSX for vSphere REST API. It has been developed and tested for use with VMware NSX for vSphere 6.x.
 
 The latest version of the NSX for vSphere 6.x RAML file can be found at http://github.com/vmware/nsxraml
@@ -11,6 +11,10 @@ Please read the bellow Version information. The 2.0 Version of nsxramlclient is 
 Also, in the NSXv 6.3 version of the nsx raml spec XML Comments and pre-filled content was introduced in the RAML spec to improve readability of the created HTML and PDF artifacts. This change may break existing code, so version 2.0.6 of the nsxramlclient now removes any XML comments and pre-filled content.
 
 # Version History
+
+## Version 2.0.7
+NSX-v 6.4 introduced a new response code 202 for the controller creation API (Issue [#22]). This version of nsxramlclient accepts 202
+as a successful response code
 
 ### Version 2.0.6
 This version of the nsxramlclient will now delete any XML comments found in the body content examples in the nsxraml spec.
@@ -34,7 +38,7 @@ Before v2.0.1 nsxramlclient only supports repeating keys in the XML body if thes
 ### Version 2.0
 This version of nsxramlclient is needed to support the new format of the nsxraml spec on http://github.com/vmware/nsxraml that introduced a breaking change in the way schemas are handled.
 In the new NSX-v RAML spec schemas are now real schemas that can be used to check the correctness of your XML document.
-In the earlier versions the schema was used to return an XML example as a python Dict. 
+In the earlier versions the schema was used to return an XML example as a python Dict.
 The new way of retrieving the XML example dict is by using the new method introduced in the 2.0 version named `extract_resource_body_example`
 
 ### Version 1.0.4
@@ -67,7 +71,7 @@ Now you can use pip to install the nsx raml client
 ```sh
 sudo pip install nsxramlclient
 ```
-In some cases the installation may fail because of missing dependencies. You may see the following message and will have to install the required packages 
+In some cases the installation may fail because of missing dependencies. You may see the following message and will have to install the required packages
 ```
 ERROR: /bin/sh: 1: xslt-config: not found
 ** make sure the development packages of libxml2 and libxslt are installed **
@@ -101,42 +105,42 @@ nsxmanager = 'nsxmanager.invalid.org'
 nsx_username = 'admin'
 nsx_password = 'vmware'
 
-client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, 
+client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username,
                            nsx_password, debug=False, fail_mode='raise')
 ```
 The NsxClient class has the following initialization parameters:
 ```python
 """
-:param raml_file: 
-This mandatory parameter is the RAML file used as the basis of all URL 
+:param raml_file:
+This mandatory parameter is the RAML file used as the basis of all URL
 compositions. It allows the client to extract the body schema and convert the schema into python dictionaries.
 
-:param nsxmanager: 
+:param nsxmanager:
 This mandatory parameter is either the hostname or IP Address of the NSX Manager appliance.
 
-:param nsx_username: 
+:param nsx_username:
 This mandatory parameter is the username on NSX Manager used for authentication to the NSX REST API running on the NSX Manager.
 
-:param nsx_password: 
+:param nsx_password:
 This mandatory parameter is the password of the user used for authentication to the NSX REST API running on the NSX Manager.
 
-:param debug: Optional: 
-If set to True, the client will print extensive HTTP session information to stdout. 
+:param debug: Optional:
+If set to True, the client will print extensive HTTP session information to stdout.
 Default: False
 
-:param verify: Optional: 
+:param verify: Optional:
 If set to True, the client will strictly verify the certificate passed by NSX Manager. It is recommmended in all production environments to use signed certificates for the NSX REST API. Please refer to the NSX for vSphere documentation for information on how to convert from the self-signed certificate to a signed certificate.
 Default: False
 
-:param suppress_warnings: Optional: 
-If set to True, the client will print out a warning if NSX Manager uses a self signed certificate. 
+:param suppress_warnings: Optional:
+If set to True, the client will print out a warning if NSX Manager uses a self signed certificate.
 Default: True
 
-:param fail_mode: Optional: 
+:param fail_mode: Optional:
 If not set, the client will exit using sys.exit when receiving any error status code from NSX like 400.
-If fail_mode is set to 'raise', the exception nsxramlclient.exceptions.NsxError will be raised with status 
-being the HTTP status code received and msg being the error message returned by NSX in the body. If set to 
-'continue', no error will be raised, and the status and body is returned like in successful cases. 
+If fail_mode is set to 'raise', the exception nsxramlclient.exceptions.NsxError will be raised with status
+being the HTTP status code received and msg being the error message returned by NSX in the body. If set to
+'continue', no error will be raised, and the status and body is returned like in successful cases.
 Default: 'exit'
 
 :return: Returns a NsxClient Session Object
@@ -144,23 +148,23 @@ Default: 'exit'
 ```
 After you initialized a session object you have access to the following methods:
 
-- create: 
+- create:
 Sends a HTTP POST to NSX Manager. More details will follow later in this readme.
 
-- read: 
+- read:
 Sends a HTTP GET to NSX Manager
 
-- update: 
+- update:
 Sends a HTTP PUT to NSX Manager
 
-- delete: 
+- delete:
 Sends a HTTP DELETE to NSX Manager
 
-- view_response: 
+- view_response:
 Each of the above methods returns a Python OrderedDictionary with the HTTP Status code,
 location header, NSX Object Id, eTag Header and Body. This method outputs the OrderedDict in human readable text to stdout.
 
-- extract_resource_body_schema: 
+- extract_resource_body_schema:
 DEPRECATION WARING: Use the method extract_resource_body_schema. In future version this will be removed
 This method will retrieve the body schema from the RAML File (if the
 method has a body schema like most create methods), and will return a
@@ -171,18 +175,18 @@ This method will retrieve the body example from the RAML File (if the
 method has a body example like most create methods), and will return a
 template python dictionary that can be used to construct subsequent API calls.
 
-- view_resource_body_schema: 
+- view_resource_body_schema:
 This method retrieves the body schema from the RAML file and outputs
 it to stdout as a pretty printed XML document.
 
-- view_resource_body_example: 
+- view_resource_body_example:
 This method retrieves the body example from the RAML file and outputs
 it to stdout as a pretty printed XML document.
 
-- view_body_dict: 
+- view_body_dict:
 This method takes a body dictionary (any python dictionary), and outputs it in a human readable format to stdout.
 
-- view_resource_display_names: 
+- view_resource_display_names:
 This method outputs displayNames and descriptions of all resources in the RAML File with their associated URI & query parameters, additional headers, and what methods are supported.
 
 
@@ -212,10 +216,10 @@ HTTP Body Content:
                     'lastInventorySyncTime': '1440445281484'}}
 
 ```
-If a method needs a URI parameter to work, the NSX RAML Client will compose the URL based on the base URL, parent and child method URL and the supplied URI parameter. To supply a URI parameter, add a URI parameter dict to 
+If a method needs a URI parameter to work, the NSX RAML Client will compose the URL based on the base URL, parent and child method URL and the supplied URI parameter. To supply a URI parameter, add a URI parameter dict to
 the call. You can supply multiple URI parameters in the call if needed.
 ```python
-In [5]: response = client_session.read('vdnSegmentPool', 
+In [5]: response = client_session.read('vdnSegmentPool',
                                        uri_parameters={'segmentPoolId': '2'})
 In [6]: client_session.view_response(response)
 HTTP status code:
@@ -228,11 +232,11 @@ HTTP Body Content:
                   'name': 'legacy'}}
 
 ```
-If a method supports one or more query parameters, you can supply those optional query parameters in your request, 
+If a method supports one or more query parameters, you can supply those optional query parameters in your request,
 and the NSX RAML Client will add the query parameter for you. To use this pass a query parameter dict to the call:
 ```python
-In [7]: response = client_session.read('nwfabricStatus', 
-                                       query_parameters_dict={'resource': 
+In [7]: response = client_session.read('nwfabricStatus',
+                                       query_parameters_dict={'resource':
                                                               'domain-c1632'})
 In [8]: client_session.view_response(response)
 HTTP status code:
@@ -243,7 +247,7 @@ It is possible to use URI and query parameters concurrently in any call and add 
 
 If a resource requires a body to be supplied with data the body can be composed in the following way:
 
-Check what the body of a call needs to look like by retrieving it out of the RAML file, 
+Check what the body of a call needs to look like by retrieving it out of the RAML file,
 and displaying it to stdout using ```view_resource_body_example```:
 ```python
 In [9]: client_session.view_resource_body_example('logicalSwitches', 'create')
@@ -257,7 +261,7 @@ In [9]: client_session.view_resource_body_example('logicalSwitches', 'create')
 ```
 It is possible to create a template python dictionary using ```extract_resource_body_example``` and display the output  structure in a human readable format to stdout:
 ```python
-In [10]: new_ls = client_session.extract_resource_body_example('logicalSwitches', 
+In [10]: new_ls = client_session.extract_resource_body_example('logicalSwitches',
 															  'create')
 
 In [11]: client_session.view_body_dict(new_ls)
@@ -280,9 +284,9 @@ In [15]: client_session.view_body_dict(new_ls)
 ```
 This example shows how to send the call to the NSX Manager API by supplying the body dictionary in the call:
 ```python
-In [16]: new_ls_response = client_session.create('logicalSwitches', 
-												 uri_parameters={'scopeId': 
-												                 'vdnscope-1'}, 
+In [16]: new_ls_response = client_session.create('logicalSwitches',
+												 uri_parameters={'scopeId':
+												                 'vdnscope-1'},
 												 request_body_dict=new_ls)
 
 In [17]: client_session.view_response(new_ls_response)
@@ -302,13 +306,13 @@ HTTP Body Content:
 ### Note on Etag header and additional headers (e.g. If-match)
 
 Some resources in NSX Manager will additionally need the ```If-match``` header.
-To compose the ```If-match``` header, retrieve the content of the Etag and return it in the 
+To compose the ```If-match``` header, retrieve the content of the Etag and return it in the
 ```If-match``` header. For example, this is used in the distributed firewall configuration to deal with
 conflicts when multiple users try to concurrently edit rule sets.
 
 This example shows how to retrieve a dfw rule, edit it, and update it via the NSX API:
 ```python
-rule_read_response = client_session.read('dfwL3Rule', 
+rule_read_response = client_session.read('dfwL3Rule',
                                          uri_parameters={'sectionId': section_id,
                                                          'ruleId': new_rule_id})
 updated_rule = l3_dfw_rule_read_response['body']
@@ -316,7 +320,7 @@ etag_value = l3_dfw_rule_read_response['Etag']
 
 updated_rule['rule']['name'] = 'UpdatedByRAMLClient'
 
-update_response = client_session.update('dfwL3Rule', 
+update_response = client_session.update('dfwL3Rule',
                                         uri_parameters={'sectionId': section_id,
                                                         'ruleId': rule_id},
                                         additional_headers={'If-match': etag_value},
@@ -338,7 +342,7 @@ In [18]: client_session.view_resource_body_example('dfwL3Rules', 'create')
 The ```rule```has the Tags ```disabled``` and ```logged```. When this type of Tag
 is found, it is converted to a key prefixed by ```@``` in the resulting dictionary:
 ```python
-In [19]: l3rule = client_session.extract_resource_body_example('dfwL3Rules', 
+In [19]: l3rule = client_session.extract_resource_body_example('dfwL3Rules',
                                                               'create')
 In [20]: client_session.view_body_dict(l3rule)
 {'rule': {'@disabled': 'false',
@@ -346,7 +350,7 @@ In [20]: client_session.view_body_dict(l3rule)
           'action': 'allow',
 .... truncated for brevity ....
 ```
-It is possible to set values using the ```@``` prefix, and they will be converted to a XML Tag of the top level 
+It is possible to set values using the ```@``` prefix, and they will be converted to a XML Tag of the top level
 object.
 ```python
 l3section_bdict['section']['rule'][0]['@logged'] = 'true'
@@ -412,11 +416,11 @@ In [21]: client_session.view_resource_body_example('dfwL3Section', 'create')
 </section>
 ```
 There are multiple ```destination``` keys under ```destinations```.
-To be able to work with python dictionaries, nsxramlclient will convert those list of equally 
+To be able to work with python dictionaries, nsxramlclient will convert those list of equally
 named parameter 'groups' to a Python list containing dictionaries.
 This example shows the resulting Python dictionary for this type of resource body schema:
 ```python
-In [22]: dfw_l3_sec = client_session.extract_resource_body_example('dfwL3Section', 
+In [22]: dfw_l3_sec = client_session.extract_resource_body_example('dfwL3Section',
                                                                   'create')
 In [31]: client_session.view_body_dict(dfw_l3_sec)
 {'section': {'@name': 'Test',
@@ -477,5 +481,5 @@ IN THE SOFTWARE.
 
 ### How to contribute
 
-Any contributions are welcome, bug reports, additional tests, enhancements, etc. 
+Any contributions are welcome, bug reports, additional tests, enhancements, etc.
 Also we welcome your feedback if you find that anything is missing that would make nsxramlclient better

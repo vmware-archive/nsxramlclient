@@ -30,6 +30,11 @@ pre-filled content.
 Version History
 ===============
 
+Version 2.0.7
+^^^^^^^^^^^^^
+NSX-v 6.4 introduced a new response code 202 for the controller creation API (Issue [#22]). This version of nsxramlclient accepts 202
+as a successful response code
+
 Version 2.0.6
 ^^^^^^^^^^^^^
 This version of the nsxramlclient will now delete any XML comments found in the body content examples in the nsxraml spec.
@@ -184,7 +189,7 @@ some helper methods that will be useful.
     nsx_username = 'admin'
     nsx_password = 'vmware'
 
-    client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username, 
+    client_session = NsxClient(nsxraml_file, nsxmanager, nsx_username,
                                nsx_password, debug=False, fail_mode='raise')
 
 The NsxClient class has the following initialization parameters:
@@ -192,36 +197,36 @@ The NsxClient class has the following initialization parameters:
 .. code:: python
 
     """
-    :param raml_file: 
-    This mandatory parameter is the RAML file used as the basis of all URL 
+    :param raml_file:
+    This mandatory parameter is the RAML file used as the basis of all URL
     compositions. It allows the client to extract the body schema and convert the schema into python dictionaries.
 
-    :param nsxmanager: 
+    :param nsxmanager:
     This mandatory parameter is either the hostname or IP Address of the NSX Manager appliance.
 
-    :param nsx_username: 
+    :param nsx_username:
     This mandatory parameter is the username on NSX Manager used for authentication to the NSX REST API running on the NSX Manager.
 
-    :param nsx_password: 
+    :param nsx_password:
     This mandatory parameter is the password of the user used for authentication to the NSX REST API running on the NSX Manager.
 
-    :param debug: Optional: 
-    If set to True, the client will print extensive HTTP session information to stdout. 
+    :param debug: Optional:
+    If set to True, the client will print extensive HTTP session information to stdout.
     Default: False
 
-    :param verify: Optional: 
+    :param verify: Optional:
     If set to True, the client will strictly verify the certificate passed by NSX Manager. It is recommmended in all production environments to use signed certificates for the NSX REST API. Please refer to the NSX for vSphere documentation for information on how to convert from the self-signed certificate to a signed certificate.
     Default: False
 
-    :param suppress_warnings: Optional: 
-    If set to True, the client will print out a warning if NSX Manager uses a self signed certificate. 
+    :param suppress_warnings: Optional:
+    If set to True, the client will print out a warning if NSX Manager uses a self signed certificate.
     Default: True
 
-    :param fail_mode: Optional: 
+    :param fail_mode: Optional:
     If not set, the client will exit using sys.exit when receiving any error status code from NSX like 400.
-    If fail_mode is set to 'raise', the exception nsxramlclient.exceptions.NsxError will be raised with status 
-    being the HTTP status code received and msg being the error message returned by NSX in the body. If set to 
-    'continue', no error will be raised, and the status and body is returned like in successful cases. 
+    If fail_mode is set to 'raise', the exception nsxramlclient.exceptions.NsxError will be raised with status
+    being the HTTP status code received and msg being the error message returned by NSX in the body. If set to
+    'continue', no error will be raised, and the status and body is returned like in successful cases.
     Default: 'exit'
 
     :return: Returns a NsxClient Session Object
@@ -313,7 +318,7 @@ the call if needed.
 
 .. code:: python
 
-    In [5]: response = client_session.read('vdnSegmentPool', 
+    In [5]: response = client_session.read('vdnSegmentPool',
                                            uri_parameters={'segmentPoolId': '2'})
     In [6]: client_session.view_response(response)
     HTTP status code:
@@ -332,8 +337,8 @@ to the call:
 
 .. code:: python
 
-    In [7]: response = client_session.read('nwfabricStatus', 
-                                           query_parameters_dict={'resource': 
+    In [7]: response = client_session.read('nwfabricStatus',
+                                           query_parameters_dict={'resource':
                                                                   'domain-c1632'})
     In [8]: client_session.view_response(response)
     HTTP status code:
@@ -367,7 +372,7 @@ human readable format to stdout:
 
 .. code:: python
 
-    In [10]: new_ls = client_session.extract_resource_body_example('logicalSwitches', 
+    In [10]: new_ls = client_session.extract_resource_body_example('logicalSwitches',
                                                                   'create')
 
     In [11]: client_session.view_body_dict(new_ls)
@@ -396,9 +401,9 @@ supplying the body dictionary in the call:
 
 .. code:: python
 
-    In [16]: new_ls_response = client_session.create('logicalSwitches', 
-                                                     uri_parameters={'scopeId': 
-                                                                     'vdnscope-1'}, 
+    In [16]: new_ls_response = client_session.create('logicalSwitches',
+                                                     uri_parameters={'scopeId':
+                                                                     'vdnscope-1'},
                                                      request_body_dict=new_ls)
 
     In [17]: client_session.view_response(new_ls_response)
@@ -428,7 +433,7 @@ via the NSX API:
 
 .. code:: python
 
-    rule_read_response = client_session.read('dfwL3Rule', 
+    rule_read_response = client_session.read('dfwL3Rule',
                                              uri_parameters={'sectionId': section_id,
                                                              'ruleId': new_rule_id})
     updated_rule = l3_dfw_rule_read_response['body']
@@ -436,7 +441,7 @@ via the NSX API:
 
     updated_rule['rule']['name'] = 'UpdatedByRAMLClient'
 
-    update_response = client_session.update('dfwL3Rule', 
+    update_response = client_session.update('dfwL3Rule',
                                             uri_parameters={'sectionId': section_id,
                                                             'ruleId': rule_id},
                                             additional_headers={'If-match': etag_value},
@@ -466,7 +471,7 @@ resulting dictionary:
 
 .. code:: python
 
-    In [19]: l3rule = client_session.extract_resource_body_example('dfwL3Rules', 
+    In [19]: l3rule = client_session.extract_resource_body_example('dfwL3Rules',
                                                                   'create')
     In [20]: client_session.view_body_dict(l3rule)
     {'rule': {'@disabled': 'false',
@@ -552,7 +557,7 @@ this type of resource body schema:
 
 .. code:: python
 
-    In [22]: dfw_l3_sec = client_session.extract_resource_body_example('dfwL3Section', 
+    In [22]: dfw_l3_sec = client_session.extract_resource_body_example('dfwL3Section',
                                                                       'create')
     In [31]: client_session.view_body_dict(dfw_l3_sec)
     {'section': {'@name': 'Test',
