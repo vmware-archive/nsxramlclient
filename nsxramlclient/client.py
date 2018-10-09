@@ -388,7 +388,8 @@ class NsxRaml(object):
 
     def add_query_parameter_url(self, url, display_name, method, query_parameters_dict):
         found_res_object = self.find_resource_recursively(display_name)
-        mandatory_query_parameters = [parameter for parameter in
+        assert not found_res_object[1].methods[method].queryParameters == None, 'The displayName used does not take any parameters. Please check the RAML for this displayName' 
+	mandatory_query_parameters = [parameter for parameter in
                                       found_res_object[1].methods[method].queryParameters.keys() if
                                       found_res_object[1].methods[method].queryParameters[parameter].required]
         missing_mandatory_qparameters = [parameter for parameter in mandatory_query_parameters if
