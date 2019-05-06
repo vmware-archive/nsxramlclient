@@ -29,5 +29,5 @@ setup(
     'Topic :: Software Development :: Libraries',
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 2.7'],
-    install_requires=['pyopenssl', 'pyraml-parser>=0.1.3', 'lxml<=4.3.3', 'requests>=2.7.0']
+    install_requires=['pyopenssl', 'pyraml-parser>=0.1.3', 'lxml<=4.3.3', 'requests>=2.7.0', 'six']
 )
