@@ -67,8 +67,8 @@ class Session(object):
 
         # if debug then enable underlying httplib debugging
         if self._debug:
-            import http.client
-            http.client.HTTPConnection.debuglevel = 1
+            from six.moves import http_client
+            http_client.HTTPConnection.debuglevel = 1
 
         # if suppress_warnings then disable any InsecureRequestWarnings caused by self signed certs
         if self._suppress_warnings:
