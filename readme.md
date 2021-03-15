@@ -1,3 +1,5 @@
+#VMware has ended active development of this project, this repository will no longer be updated.
+
 #nsxramlclient
 
 This Python based client for NSX for vSphere 6.x gets its API structure information
