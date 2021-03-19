@@ -16,6 +16,8 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+from __future__ import print_function
+
 __author__ = 'yfauser'
 
 import re
@@ -173,20 +175,20 @@ class NsxClient(object):
 
     def view_resource_body_schema(self, searched_resource, method):
         xml_schema_result = self._nsxraml.get_xml_schema_by_displayname(searched_resource, method)
-        print et.tostring(xml_schema_result, pretty_print=True)
+        print(et.tostring(xml_schema_result, pretty_print=True))
 
     def view_resource_body_example(self, searched_resource, method, remove_content=None, remove_comments=None):
         xml_schema_result = self._nsxraml.get_xml_example_by_displayname(searched_resource, method,
                                                                          remove_comments=remove_comments,
                                                                          remove_content=remove_content)
-        print et.tostring(xml_schema_result, pretty_print=True)
+        print(et.tostring(xml_schema_result, pretty_print=True))
 
     def extract_resource_body_schema(self, searched_resource, method):
         # NOTE: THis method is deprecated and will be removed in future version
         xml_schema_result = self._nsxraml.get_xml_schema_by_displayname(searched_resource, method)
-        print '\033[91m' + "DEPRECATION WARNING: This method is deprecated in nsxramlclient v2.x and " \
+        print('\033[91m' + "DEPRECATION WARNING: This method is deprecated in nsxramlclient v2.x and " \
                            "will be removed in future.\nPlease start using the method extract_resource_body_example " \
-                           "instead.\nThis method does not support the NSXv 6.2.4 and later RAML specs" + '\033[0m'
+                           "instead.\nThis method does not support the NSXv6.2.4 and later RAML specs" + '\033[0m')
         return xmloperations.xml_to_dict(xml_schema_result)
 
     def extract_resource_body_example(self, searched_resource, method, remove_content=None, remove_comments=None):
@@ -198,15 +200,15 @@ class NsxClient(object):
     @staticmethod
     def view_response(ordered_dict):
         pretty_printer = pprint.PrettyPrinter()
-        print 'HTTP status code:\n{}\n'.format(ordered_dict['status'])
+        print('HTTP status code:\n{}\n'.format(ordered_dict['status']))
         if ordered_dict['location']:
-            print 'HTTP location header:\n{}\n'.format(ordered_dict['location'])
+            print('HTTP location header:\n{}\n'.format(ordered_dict['location']))
         if ordered_dict['objectId']:
-            print 'NSX Object Id:\n{}\n'.format(ordered_dict['objectId'])
+            print('NSX Object Id:\n{}\n'.format(ordered_dict['objectId']))
         if ordered_dict['Etag']:
-            print 'Etag Header:\n{}\n'.format(ordered_dict['Etag'])
+            print('Etag Header:\n{}\n'.format(ordered_dict['Etag']))
         if ordered_dict['body']:
-            print 'HTTP Body Content:'
+            print('HTTP Body Content:')
             pretty_printer.pprint(ordered_dict['body'])
 
     @staticmethod
@@ -229,7 +231,7 @@ class NsxClient(object):
 
             output_text.append('\n')
 
-        print ''.join(output_text)
+        print(''.join(output_text))
 
     def read_all_pages(self, searched_resource, uri_parameters=None, request_body_dict=None,
                        query_parameters_dict=None, additional_headers=None):
