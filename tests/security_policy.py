@@ -22,6 +22,7 @@
 
 __author__ = 'yfauser'
 
+from six.moves import input
 from tests.config import *
 from nsxramlclient.client import NsxClient
 from distutils.util import strtobool
@@ -32,7 +33,7 @@ def user_yes_no_query(question):
     sys.stdout.write('%s [y/n]\n' % question)
     while True:
         try:
-            return strtobool(raw_input().lower())
+            return strtobool(input().lower())
         except ValueError:
             sys.stdout.write('Please respond with \'y\' or \'n\'.\n')
 

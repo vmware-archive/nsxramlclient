@@ -36,11 +36,11 @@ def xml_to_dict(etree_object):
     if children:
         dd = defaultdict(list)
         for dc in map(xml_to_dict, children):
-            for k, v in dc.iteritems():
+            for k, v in dc.items():
                 dd[k].append(v)
-        return_dict = {etree_object.tag: {k: v[0] if len(v) == 1 else v for k, v in dd.iteritems()}}
+        return_dict = {etree_object.tag: {k: v[0] if len(v) == 1 else v for k, v in dd.items()}}
     if etree_object.attrib:
-        return_dict[etree_object.tag].update(('@' + k, v) for k, v in etree_object.attrib.iteritems())
+        return_dict[etree_object.tag].update(('@' + k, v) for k, v in etree_object.attrib.items())
     if etree_object.text:
         text = etree_object.text.strip()
         if children or etree_object.attrib:
@@ -60,7 +60,7 @@ def dict_to_xml(dict_to_parse):
 
 
 def parse_dict(xml_root_object, dict_to_parse):
-    for subitem in dict_to_parse.items():
+    for subitem in list(dict_to_parse.items()):
         # subitem is now a tuple of key, value in the dict
         xml_subitem_name = subitem[0]
         if type(subitem[1]) in (str, int, None):

@@ -55,7 +55,7 @@ def readByFilters():
 def readByIds():
 
     l3_dfw_by_section_id = client_session.read('dfwL3SectionId', uri_parameters={'sectionId': '1300'})
-    print l3_dfw_by_section_id
+    print(l3_dfw_by_section_id)
     client_session.view_response(l3_dfw_by_section_id)
 
     l2_dfw_by_section_id = client_session.read('dfwL2SectionId', uri_parameters={'sectionId': '1014'})

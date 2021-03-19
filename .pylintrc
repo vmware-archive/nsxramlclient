@@ -1,0 +1,3 @@
+[TYPECHECK]
+generated-members=requests.packages.urllib3
+ignored-modules = distutils

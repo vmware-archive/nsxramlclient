@@ -44,8 +44,8 @@ try:
     new_ls_props = client_session.read('logicalSwitch', uri_parameters={'virtualWireID': lswitch_id2})
     client_session.view_response(new_ls_props)
 except NsxError as e:
-    print "### caught exception !!!!"
-    print e.status, e.msg
+    print("### caught exception !!!!")
+    print(e.status, e.msg)
 
 
 # Try to read properties using a invalid virtual wire Id
@@ -53,5 +53,5 @@ try:
     new_ls_props = client_session.read('logicalSwitch', uri_parameters={'virtualWireID': lswitch_id3})
     client_session.view_response(new_ls_props)
 except NsxError as e:
-    print "### caught exception !!!!"
-    print e.status, e.msg
+    print("### caught exception !!!!")
+    print(e.status, e.msg)
